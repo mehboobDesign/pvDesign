@@ -121,7 +121,7 @@ const Login = () => {
             <div className="grid mt-6">
                 <button className="border bg-white text-stone-700 hover:bg-amber-500 hover:border-amber-500 rounded-lg p-2 disabled:cursor-not-allowed">Sign In</button>
             </div>
-            <p className="mt-8 text-stone-700">Not registered yet!, <Link to="/register" className="text-lime-500">Click here</Link> to register.</p>
+            <p className="mt-8 text-stone-700">Plz, <Link to="/register" className="text-lime-500">Click here</Link> to register.</p>
         </form>
     </div> 
     }
