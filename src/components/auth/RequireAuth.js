@@ -8,7 +8,6 @@ const RequireAuth = () => {
     const location = useLocation(); 
     return (
         
-        //auth?.user 
           auth?.email 
             ?   <>
                     <Navbar/>
