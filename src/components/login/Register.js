@@ -82,7 +82,8 @@ const Register = () => {
             email: email,
             password: pwd,
             //role:"ADMIN"
-            role:"USER"
+            //role:"USER"
+            role:"MASTER"
           })
           .then(function (response) {
             console.log(response);

@@ -94,7 +94,7 @@ const Login = () => {
         <p className={errMsg ? "text-red-500" : "hidden"} ref={errorRef} aria-live="assertive">{errMsg}</p>
             <h1 className="text-4xl font-bold dark:text-gray-800 text-orange-600">Login</h1>
             <div className="grid pt-2">
-                <label htmlFor="username" className="mb-2">
+                <label htmlFor="email" className="mb-2">
                     <span className="dark:text-slate-800 text-stone-700">Email:</span>
                 </label>
                 <input

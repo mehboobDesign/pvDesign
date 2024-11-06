@@ -1,11 +1,28 @@
-import React,{useState} from "react";
+import React,{useState, useEffect} from "react";
 import SelectComponent from '../../Common/SelectComponent';
 import InputComponent from '../../Common/InputComponent';
+import Axios from "../../../api/Axios";
 
 const ConfigureProject = () => {
     const [pvModuleType, setPvModuleType] = useState();
     const [pvModuleTypeFocus, setPvModuleTypeFocus] = useState(false);
+
+    const GET_PVMODULES_URL = 'pvmodules/';
     const pv_module_type = ['ABC','XYZ','UVW'];
+    useEffect(()=>{
+        const getAllPvModules = async () => {
+            try {
+                await Axios.get(GET_PVMODULES_URL)
+                .then(function (response) {
+                    //setRole(response.data.role);
+                    console.log(response);
+                })
+            } catch (err) {
+                console.log(err);
+            }
+        };
+        getAllPvModules();
+    },[]);
     return( 
     <>
         <div className="text-center font-bold p-4 bg-slate-100 mb-4">Configure Your Project</div>
