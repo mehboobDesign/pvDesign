@@ -42,10 +42,10 @@ const Login = () => {
                     password: pwd
                 }
             );
-            //console.log(response?.data?.message);
-            console.log(response?.status);
+            const userEmail = response.data.email;
+            const userId = response.data.userId;
             if(response?.status === 200) { 
-                setAuth({email,pwd});
+                setAuth({userEmail,userId});
                 setEmail('');
                 setPwd('');
                 navigate( from, { replace: true});
@@ -94,7 +94,7 @@ const Login = () => {
         <p className={errMsg ? "text-red-500" : "hidden"} ref={errorRef} aria-live="assertive">{errMsg}</p>
             <h1 className="text-4xl font-bold dark:text-gray-800 text-orange-600">Login</h1>
             <div className="grid pt-2">
-                <label htmlFor="username" className="mb-2">
+                <label htmlFor="email" className="mb-2">
                     <span className="dark:text-slate-800 text-stone-700">Email:</span>
                 </label>
                 <input

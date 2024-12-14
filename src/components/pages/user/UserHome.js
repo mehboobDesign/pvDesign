@@ -25,7 +25,7 @@ const UserHome = () => {
                 <div className={`flex gap-x-4 items-center duration-500 hover:bg-slate-600 p-2 cursor-pointer ${content === 2 && "bg-slate-300"}`} onClick={()=>setContent(2)}>
                    <FontAwesomeIcon className={`cursor-pointer pl-4 duration-500 text-slate-800 hover:text-white`} size="2x" icon={faFile} />
                     <p className={`text-slate-800 origin-left font-medium
-                     text-md duration-300 ${!open && "hidden"} hover:text-white`}>New_Project</p>
+                     text-md duration-300 ${!open && "hidden"} hover:text-white`}>Add_Project</p>
                 </div>
                 <div className={`flex gap-x-4 items-center duration-500 hover:bg-slate-600 p-2 cursor-pointer ${content === 3 && "bg-slate-300"}`} onClick={()=>setContent(3)}>
                    <FontAwesomeIcon className={`cursor-pointer pl-4 duration-500 text-slate-800 hover:text-white`} size="2x" icon={faGear} />

@@ -27,7 +27,7 @@ const Navbar = () => {
           <div className="text-2xl font-bold px-4 text-amber-500 dark:text-amber-500">
           <Link to='/'>PV_design_solutions</Link>
           </div>
-          <div className='font-bold text-slate-500'>Welcome {auth.email} </div>
+          <div className='font-bold text-slate-500'>Welcome {auth.userEmail} </div>
           {toogle && <ul className='font-normal bg-neutral-200 dark:bg-slate-700 text-cyan-50 absolute top-16 right-0 w-60 flex flex-col items-start  p-2 border-[0.1px] border-slate-800'>
             <li className='flex w-full justify-between'>
             <Link onClick={closeMenu} className='flex w-full justify-between hover:text-lime-300 hover:bg-slate-900 cursor-pointer rounded-r-lg border-l-transparent hover:border-l-lime-300 border-l-4 p-4' to='disposedList'>Dispose Case</Link>
