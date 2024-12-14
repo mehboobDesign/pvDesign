@@ -42,10 +42,10 @@ const Login = () => {
                     password: pwd
                 }
             );
-            //console.log(response?.data?.message);
-            console.log(response?.status);
+            const userEmail = response.data.email;
+            const userId = response.data.userId;
             if(response?.status === 200) { 
-                setAuth({email,pwd});
+                setAuth({userEmail,userId});
                 setEmail('');
                 setPwd('');
                 navigate( from, { replace: true});

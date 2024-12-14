@@ -59,16 +59,29 @@ const ShowPvModule = () => {
     <div className='dark:text-slate-700 text-slate-700 text-2xl'>
       No entry for PV Modules are found.
     </div> : 
-    <div className='grid'><div class="grid grid-cols-3 gap-4">
+    <div className='grid'><div className="grid grid-cols-2 gap-6">
         {pvModulesData.map((data,index) => ( 
-                <div key={index} className='shadow-xl border border-cyan-50'>
-                    <h1 className='text-xl font-bold p-4'>{data.pvmodule_id} {data.manufacturer}</h1>
-                    <hr/>
-                    <div className='p-4 leading-4'>Model: {data.model}</div>
-                    <div className='p-4 leading-4'>Unit Nom Power: {data.unitNomPower}</div>
-                    <div className='p-4 leading-4'>No of Modules: {data.no_modules}</div>
-                    <div className='p-4 leading-4'>Nominal STC: {data.nominal_STC}</div>
-                    <hr/>
+                <div key={index} className='shadow-xl border border-gray-200'>
+                    <h1 className='text-xl font-bold p-4'>{data.pvmodule_id} {data.manufacturer}
+                      <span className='float-right text-orange-500'>Type: {data.type}</span>
+                    </h1>
+                    <div className='grid grid-cols-2 gap-1 [&>*]:p-2 [&>*:nth-child(odd)]:bg-gray-100 [&>*:nth-child(even)]:bg-gray-50'>
+                    <div>Model: <span className='font-black text-orange-800'>{data.model}</span></div>
+                    <div>Panel Wattage: <span className='font-black text-orange-800'>{data.panel_wattage}</span></div>
+                    <div>Voltage Open Circuit VOC: <span className='font-black text-orange-800'>{data.voltage_open_circuit_voc}</span></div>
+                    <div>Current Short Circuit ISC: <span className='font-black text-orange-800'>{data.current_short_circuit_isc}</span></div>
+                    <div>Max Power Current: <span className='font-black text-orange-800'>{data.max_power_current_impp}</span></div>
+                    <div>Temp Coecient of PMAX: <span className='font-black text-orange-800'>{data.temp_coecient_of_pmax}</span></div>
+                    <div>Temp Coecient of VOC: <span className='font-black text-orange-800'>{data.temp_coecient_of_voc}</span></div>
+                    <div>Temp Coecient of ISC: <span className='font-black text-orange-800'>{data.temp_coecient_of_isc}</span></div>
+                    <div>Module Length: <span className='font-black text-orange-800'>{data.module_length}</span></div>
+                    <div>Module Breadth: <span className='font-black text-orange-800'>{data.module_breadth}</span></div>
+                    <div>Module Thickness: <span className='font-black text-orange-800'>{data.module_thickness}</span></div>
+                    <div>Unit Nom Power: <span className='font-black text-orange-800'>{data.unitNomPower}</span></div>
+                    <div>No of Modules: <span className='font-black text-orange-800'>{data.no_modules}</span></div>
+                    <div>Nominal STC: <span className='font-black text-orange-800'>{data.nominal_STC}</span></div>
+                    <div className='col-span-2'>Max Power Voltage VMPP: <span className='font-black text-orange-800'>{data.max_power_voltage_vmpp}</span></div>
+                    </div>
                     <div className='p-4 text-center'><button className='dark:bg-slate-100 bg-slate-300 p-2 hover:bg-green-400 leading-4' onClick={()=>showSingleData(data.pvmodule_id)}>
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
                     <path strokeLinecap="round" strokeLinejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125" />
@@ -80,23 +93,22 @@ const ShowPvModule = () => {
                    </svg>
                  </button> 
                   </div>
-                </div> 
-                
+                </div>       
         ))} 
         </div> 
       </div>
     }
-    {modalOpen && <PvModuleUpdateModal closeModal={()=>setModalOpen(false)} dataId={dataId} setUpdating={setUpdating}/>}
-    <AlertModal deleteModalOpen={deleteModalOpen} onClose={()=>setDeleteModalOpen(false)}>
-                 <div className='text-center w-96'>
-                   <h3 className='text-lg font-black text-gray-800 p-4'>Confirm Delete</h3>
-                   <p className='text-sm text-gray-500 pb-4 pl-4 pr-4'>Are you want to delete {manufacturerName}?</p>
+    <PvModuleUpdateModal modalOpen={modalOpen} onClose={()=>setModalOpen(false)} dataId={dataId} setUpdating={setUpdating}/>
+    <AlertModal modalOpen={deleteModalOpen} onClose={()=>setDeleteModalOpen(false)}>
+        <div className='text-center w-96'>
+            <h3 className='text-lg font-black text-gray-800 p-4'>Confirm Delete</h3>
+                <p className='text-sm text-gray-500 pb-4 pl-4 pr-4'>Are you want to delete {manufacturerName}?</p>
                    <div className='flex gap-4'>
                      <button className="bg-red-500 hover:bg-red-600 text-white font-semibold border border-red-500 hover:border-transparent rounded w-full p-2" onClick={()=>confirmDelete()}>Delete</button>
                      <button className="border border-gray-200 bg-gray-200 text-slate-700 hover:bg-gray-100 w-full p-2" onClick={()=>setDeleteModalOpen(false)}>Cancel</button>
                    </div>
-                 </div>
-               </AlertModal>
+          </div>
+      </AlertModal>
   </div>
   )
 }

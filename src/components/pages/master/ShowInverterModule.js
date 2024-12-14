@@ -59,18 +59,32 @@ const ShowInverterModule = () => {
     <div className='dark:text-slate-700 text-slate-700 text-2xl'>
       No entry for Inverter Modules are found.
     </div> : 
-    <div className='grid'><div class="grid grid-cols-3 gap-4">
+    <div className='grid'><div className="grid grid-cols-2 gap-6">
+      
         {inverterModulesData.map((data,index) => ( 
-                <div key={index} className='shadow-xl border border-cyan-50'>
-                    <h1 className='text-xl font-bold p-4'>{data.inverter_id} {data.manufacturer}</h1>
-                    <hr/>
-                    <div className='p-4 leading-4'>Maximum Power: {data.max_power}</div>
-                    <div className='p-4 leading-4'>Model: {data.model}</div>
-                    <div className='p-4 leading-4'>No of Inverters: {data.no_inverters}</div>
-                    <div className='p-4 leading-4'>Operating Voltage Range: {data.operating_voltage_range}</div>
-                    <div className='p-4 leading-4'>Total Power: {data.total_power}</div>
-                    <div className='p-4 leading-4'>Unit Nom Power: {data.unit_nom_power}</div>
-                    <hr/>
+                <div key={index} className='shadow-xl border border-gray-200'>
+                    <h1 className='text-xl font-bold p-4'>{data.inverter_id} {data.manufacturer}
+                    <span className='float-right text-orange-500'>Type: {data.type}</span>
+                    </h1>
+                    <div className='grid grid-cols-2 gap-1 [&>*]:p-2 [&>*:nth-child(odd)]:bg-gray-100 [&>*:nth-child(even)]:bg-gray-50'>
+                      <div>Number of Inverters: <span className='font-black text-orange-800'>{data.no_inverters}</span></div>
+                      <div>Number of MPP Inputs: <span className='font-black text-orange-800'>{data.no_mpp_inputs}</span></div>
+                      <div>AC OP Power: <span className='font-black text-orange-800'>{data.ac_op_power}</span></div>
+                      <div>AC Voltage Range: <span className='font-black text-orange-800'>{data.ac_voltage_range_start} - {data.ac_voltage_range_end}</span></div>
+                      <div>Max AC OP Current: <span className='font-black text-orange-800'>{data.max_ac_op_current}</span></div>
+                      <div>Max DC ISC: <span className='font-black text-orange-800'>{data.max_dc_isc}</span></div>
+                      <div>Max No Input Connector: <span className='font-black text-orange-800'>{data.max_no_input_connector}</span></div>
+                      <div>Max Power: <span className='font-black text-orange-800'></span>{data.max_power}</div>
+                      <div >Max PV Input Current: <span className='font-black text-orange-800'>{data.max_pv_input_current}</span></div>
+                      <div >Max PV Input Voltage: <span className='font-black text-orange-800'>{data.max_pv_input_voltage}</span></div>
+                      <div>Min PV Input Voltage: <span className='font-black text-orange-800'>{data.min_pv_input_voltage}</span></div>
+                      <div>Model: <span className='font-black text-orange-800'>{data.model}</span></div>
+                      <div >MPP Voltage Range: <span className='font-black text-orange-800'>{data.mpp_voltage_range_start} - {data.mpp_voltage_range_end}</span></div>
+                      <div >Nominal PV Input Voltage: <span className='font-black text-orange-800'>{data.nominal_pv_input_voltage}</span></div>
+                      <div>Unit NOM Power: <span className='font-black text-orange-800'>{data.unit_nom_power}</span></div>
+                      <div>Total Power: <span className='font-black text-orange-800'>{data.total_power}</span></div>
+                      <div className='col-span-2'>MPP Voltage Range Nominal Power: <span className='font-black text-orange-800'>{data.mpp_voltage_range_nominal_power_start} - {data.mpp_voltage_range_nominal_power_end}</span></div>
+                    </div>
                     <div className='p-4 text-center'><button className='dark:bg-slate-100 bg-slate-300 p-2 hover:bg-green-400 leading-4' onClick={()=>showSingleData(data.inverter_id)}>
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
                     <path strokeLinecap="round" strokeLinejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125" />
@@ -82,14 +96,14 @@ const ShowInverterModule = () => {
                    </svg>
                  </button> 
                   </div>
-                </div> 
+              </div> 
                 
         ))} 
         </div> 
       </div>
     }
-    {modalOpen && <InverterModuleUpdateModal closeModal={()=>setModalOpen(false)} dataId={dataId} setUpdating={setUpdating}/>}
-    <AlertModal deleteModalOpen={deleteModalOpen} onClose={()=>setDeleteModalOpen(false)}>
+    {<InverterModuleUpdateModal modalOpen={modalOpen} onClose={()=>setModalOpen(false)} dataId={dataId} setUpdating={setUpdating}/>}
+      <AlertModal modalOpen={deleteModalOpen} onClose={()=>setDeleteModalOpen(false)}>
                  <div className='text-center w-96'>
                    <h3 className='text-lg font-black text-gray-800 p-4'>Confirm Delete</h3>
                    <p className='text-sm text-gray-500 pb-4 pl-4 pr-4'>Are you want to delete {manufacturerName} ?</p>
@@ -98,7 +112,7 @@ const ShowInverterModule = () => {
                      <button className="border border-gray-200 bg-gray-200 text-slate-700 hover:bg-gray-100 w-full p-2" onClick={()=>setDeleteModalOpen(false)}>Cancel</button>
                    </div>
                  </div>
-               </AlertModal>
+      </AlertModal>
   </div>
   )
 }

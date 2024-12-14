@@ -17,7 +17,7 @@ const Home = () => {
     useEffect(()=>{
         const getRole = async () => {
             try {
-                await Axios.get(GET_ROLE_URL.concat(auth.email))
+                await Axios.get(GET_ROLE_URL.concat(auth.userEmail))
                 .then(function (response) {
                     setRole(response.data.role);
                 })
@@ -26,7 +26,7 @@ const Home = () => {
             }
         };
         getRole();
-    },[auth.email]);
+    },[auth.userEmail]);
 
     return (
         <>
