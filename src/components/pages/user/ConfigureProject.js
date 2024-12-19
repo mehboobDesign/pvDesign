@@ -11,7 +11,7 @@ import UseAuth from "../../Hooks/UseAuth";
 
 const GET_PVMODULES_URL = 'pvmodules/';
 const GET_INVERTER_URL = 'inverter/';  
-const PV = 'pv/';                   
+const PV = 'design/pv/';                   
 const INV = '/inv/';
 const USER = '/user/';
 const CONFIG = '/config';

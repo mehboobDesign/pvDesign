@@ -6,12 +6,14 @@ import Input from "../../Common/Input";
 import { NOT_SPECIAL_CHAR,DIRECTION } from '../../Common/ValidationConstants';
 import AlertModal from "../../Common/Modal/AlertModal";
 import SelectSearch from "../../Common/SelectSearch";
+import UseAuth from "../../Hooks/UseAuth";
 
 const NEW_PROJECT = 'v1/projects/new/';
 
-const DESIGN_CONFIG = 'design/';
+const DESIGN_CONFIG = 'design/user/';
 
 const AddNewProject = () => {
+    const {auth}=UseAuth();
     const [designData, setDesignData] = useState([]);
     const [designId, setDesignId] = useState('');
     const [designName, setDesignName] = useState('');
@@ -62,9 +64,9 @@ const AddNewProject = () => {
     },[longitude]);
 
     useEffect(()=>{
-        const getAllDesignConfig = async () => {
+        const getAllDesignConfigById = async () => {
             try {
-                await Axios.get(DESIGN_CONFIG)
+                await Axios.get(DESIGN_CONFIG.concat(auth.userId))
                 .then(function (response) {
                     setDesignData(response.data); 
                 })
@@ -72,8 +74,8 @@ const AddNewProject = () => {
                 console.log(err);
             }
         };
-        getAllDesignConfig();
-    },[]);
+        getAllDesignConfigById();
+    },[auth.userId]);
     const handleSubmit = async (e) => {
         e.preventDefault();
         if(validDesignName && validProjectName && validProjectLocation && validLatitude && validLongitude) {
@@ -84,7 +86,7 @@ const AddNewProject = () => {
                     project_latitude:latitude,
                 }
                 try {
-                    const response = await Axios.post(NEW_PROJECT.concat(designId), data);
+                    const response = await Axios.post(NEW_PROJECT.concat(designId).concat('/').concat(auth.userId), data);
                     console.log(JSON.stringify(response?.data));
                     setSuccessAlert(true);
                   } catch(err) { 
