@@ -1,11 +1,11 @@
 import React from "react";
-import Select from'react-select';
-import { faInfoCircle,faCheck,faTimes } from "@fortawesome/free-solid-svg-icons";
+import Select from 'react-select';
+import { faInfoCircle, faCheck, faTimes } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 
-const SelectSearch = (props) => { 
-    
+const SelectSearch = (props) => {
+
     return (
         <>
             <label className="block tracking-wide text-gray-700 text-md font-bold mb-1" htmlFor={props.id}>
@@ -31,32 +31,33 @@ const SelectSearch = (props) => {
                 onBlur={props.onBlur}
                 styles={{
                     control: (baseStyles) => ({
-                                ...baseStyles,
-                                border: "none",
-                                boxShadow: "none",
-                                //borderColor: props.validRule ? 'green' : 'red',
-                                padding:"2px",
-                                backgroundColor:"rgb(241 245 249)",
-                                cursor:"pointer",
-                                ":hover":{
-                                    backgroundColor:"rgb(226 232 240)",
-                                },
-                            }),
-                            option: (baseStyles) => ({
-                                ...baseStyles,
-                                backgroundColor: "rgb(241 245 249)",
-                                color:"rgb(51 65 85)",
-                                cursor:"pointer",
-                                ":hover":{
-                                    backgroundColor:"rgb(226 232 240)",
-                                }
-                            })
-                        }}
-                    />
-                <p className={`${props.focusValue && !props.validValue? "text-red-400" : "hidden"}`}>
-                    <FontAwesomeIcon icon={faInfoCircle} />&nbsp;
-                    {props.errorMsg}
-                </p>
+                        ...baseStyles,
+                        border: "none",
+                        boxShadow: "none",
+                        borderRadius: 0,
+                        //borderColor: props.validRule ? 'green' : 'red',
+                        padding: "2px",
+                        backgroundColor: "rgb(241 245 249)",
+                        cursor: "pointer",
+                        ":hover": {
+                            backgroundColor: "rgb(226 232 240)",
+                        },
+                    }),
+                    option: (baseStyles) => ({
+                        ...baseStyles,
+                        backgroundColor: "rgb(241 245 249)",
+                        color: "rgb(51 65 85)",
+                        cursor: "pointer",
+                        ":hover": {
+                            backgroundColor: "rgb(226 232 240)",
+                        }
+                    })
+                }}
+            />
+            <p className={`${props.focusValue && !props.validValue ? "text-red-400" : "hidden"}`}>
+                <FontAwesomeIcon icon={faInfoCircle} />&nbsp;
+                {props.errorMsg}
+            </p>
         </>
     );
 }
