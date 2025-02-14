@@ -4,32 +4,34 @@ import RequireAuth from "./components/auth/RequireAuth";
 import Home from "./components/pages/Home";
 import Layout from "./components/Layout";
 import Register from "./components/login/Register";
+import Landing from './components/login/Landing';
 //import UseAuth from "../Hooks/UseAuth";
 
 function App() {
-  
-  return (
-   
-    <Routes>
-        <Route path='/' element={<Layout/>}>
-          {/* public routes */}
-          <Route path='/login' element={<Login/>}></Route>
-          <Route path='/register' element={<Register/>}></Route>
-          {/* <Route path='unauthorized' element={<Unauthorized/>}></Route> */}
 
-          {/* protected routes*/}
-          <Route element={<RequireAuth/>}>
-            <Route path='/' element={<Home/>}></Route>
-           
-            {/* <Route path='disposedList' element={<DisposedList/>}></Route>
+  return (
+
+    <Routes>
+      <Route path='/' element={<Layout />}>
+        {/* public routes */}
+        <Route path='/login' element={<Login />}></Route>
+        <Route path='/register' element={<Register />}></Route>
+        <Route path='/landing' element={<Landing />}></Route>
+        {/* <Route path='unauthorized' element={<Unauthorized/>}></Route> */}
+
+        {/* protected routes*/}
+        <Route element={<RequireAuth />}>
+          <Route path='/' element={<Home />}></Route>
+
+          {/* <Route path='disposedList' element={<DisposedList/>}></Route>
             <Route path='pendingList' element={<PendingList/>}></Route>
             <Route path='report' element={<GenReport/>}></Route>
             <Route path='addCase' element={<AddCase/>}></Route> */}
-          </Route>
-           {/* catch all*/}
-           {/* <Route path='*' element={<Missing />}></Route> */}
         </Route>
-      </Routes>
+        {/* catch all*/}
+        {/* <Route path='*' element={<Missing />}></Route> */}
+      </Route>
+    </Routes>
   );
 }
 
