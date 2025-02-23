@@ -135,7 +135,7 @@ const PvModuleUpdateModal = ({ modalOpen, onClose, dataId, setUpdating }) => {
     }, [pvType]);
 
     useEffect(() => {
-        const result = ONLY_INTEGER.test(lightInDeg);
+        const result = NUMBER_DECIMAL.test(lightInDeg);
         setValidLightInDeg(result);
     }, [lightInDeg]);
 
@@ -157,7 +157,7 @@ const PvModuleUpdateModal = ({ modalOpen, onClose, dataId, setUpdating }) => {
         setValidBackIrr(result);
     }, [backIrr]);
     useEffect(() => {
-        const result = ONLY_INTEGER.test(mismatchLoss);
+        const result = NUMBER_DECIMAL.test(mismatchLoss);
         setValidMismatchLoss(result);
     }, [mismatchLoss]);
     useEffect(() => {
@@ -165,7 +165,7 @@ const PvModuleUpdateModal = ({ modalOpen, onClose, dataId, setUpdating }) => {
         setValidDegradationLoss(result);
     }, [degradationLoss]);
     useEffect(() => {
-        const result = ONLY_INTEGER.test(qualityLoss);
+        const result = NUMBER_DECIMAL.test(qualityLoss);
         setValidQualityLoss(result);
     }, [qualityLoss]);
     useEffect(() => {
@@ -177,15 +177,15 @@ const PvModuleUpdateModal = ({ modalOpen, onClose, dataId, setUpdating }) => {
         setValidModulesStrings(result);
     }, [modulesStrings]);
     useEffect(() => {
-        const result = ONLY_INTEGER.test(ohmicWiLoss)
+        const result = NUMBER_DECIMAL.test(ohmicWiLoss)
         setValidOhmicWiLoss(result);
     }, [ohmicWiLoss]);
     useEffect(() => {
-        const result = ONLY_INTEGER.test(pvLossIrr);
+        const result = NUMBER_DECIMAL.test(pvLossIrr);
         setValidPvLossIrr(result);
     }, [pvLossIrr]);
     useEffect(() => {
-        const result = ONLY_INTEGER.test(pvLossTemp);
+        const result = NUMBER_DECIMAL.test(pvLossTemp);
         setValidPvLossTemp(result);
     }, [pvLossTemp]);
 
@@ -195,15 +195,15 @@ const PvModuleUpdateModal = ({ modalOpen, onClose, dataId, setUpdating }) => {
     }, [maxPowerCurrent]);
 
     useEffect(() => {
-        const result = NUMBER_DECIMAL.test(tempPmax);
+        const result = ALPHA_NUMERIC.test(tempPmax);
         setValidTempPmax(result);
     }, [tempPmax]);
     useEffect(() => {
-        const result = NUMBER_DECIMAL.test(tempVoc);
+        const result = ALPHA_NUMERIC.test(tempVoc);
         setValidTempVoc(result);
     }, [tempVoc]);
     useEffect(() => {
-        const result = NUMBER_DECIMAL.test(tempIsc);
+        const result = ALPHA_NUMERIC.test(tempIsc);
         setValidTempIsc(result);
     }, [tempIsc]);
     useEffect(() => {
@@ -322,15 +322,15 @@ const PvModuleUpdateModal = ({ modalOpen, onClose, dataId, setUpdating }) => {
     return (
         <>
             <div className={`fixed inset-0 flex justify-center items-center transition-colors
-                ${modalOpen ? "visible bg-black/50" : "invisible"}`}>
+                ${modalOpen ? "visible bg-black/50" : "invisible"} z-30`}>
                 <div onClick={(e) => e.stopPropagation()}
                     className={`bg-white shadow transition-all w-9/12
-                ${modalOpen ? "scale-100 opacity-100" : "scale-125 opacity-0"} mt-11`}>
+                ${modalOpen ? "scale-100 opacity-100" : "scale-125 opacity-0"}`}>
                     {/* <button onClick={onClose} className="absolute top-2 right-2 p-2 font-bold text-gray-400 bg-white
                 hover:bg-gray-50 hover:text-red-500">X</button> */}
                     <h3 className='text-lg text-center font-black text-gray-800 p-4 bg-slate-200'>Update PV Module Details</h3>
                     <form className="pt-2" onSubmit={handleSubmit}>
-                        <div className="flex flex-wrap p-3">
+                        <div className="flex flex-wrap p-4">
                             <div className="w-1/4 pr-2">
                                 <Label htmlFor="manufacturer" nameOfLabel="Manufacturer" validRule={validManufacturer} nameOfState={manufacturer} />
                                 <Input id="manufacturer" value={manufacturer} autoComplete="off"

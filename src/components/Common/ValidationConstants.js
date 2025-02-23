@@ -11,11 +11,11 @@ const CHAR_REGEX_CASE_CAT = /^[^ ][A-Za-z ( )]+$/;
 const ONLY_CHAR_REGEX = /^[^ ][A-Za-z ]+$/;
 
 const ONLY_NUMBER = /^[0-9]{1,4}$/;
-const NUMBER_DECIMAL = /^([0-9]{2,6})(\.[0-9]{1,2})$/;
+const NUMBER_DECIMAL = /^([0-9]{1,6})(\.[0-9]{1,6})$/;
 const ALPHA_NUMERIC = /^[a-zA-Z0-9.-]{3,23}$/;
-const ONLY_INTEGER = /^[0-9]{1,4}$/;
-const DOUBLE_TYPE = /^[0-9]\d*(\.\d{1,2})?$/;
-const NOT_SPECIAL_CHAR = /^[a-zA-Z0-9 .-]{3,35}$/;
+const ONLY_INTEGER = /^[0-9]{1,7}$/;
+const DOUBLE_TYPE = /^[0-9]\d*(\.\d{1,5})?$/;
+const NOT_SPECIAL_CHAR = /^[a-zA-Z0-9 .-]{3,50}$/;
 const DIRECTION = /^[a-zA-Z0-9 '^0.-]{3,35}$/;
 const VALID_YEAR = /^[0-9]{4}$/;
 

@@ -8,7 +8,7 @@ const SelectSearch = (props) => {
 
     return (
         <>
-            <label className="block tracking-wide text-gray-700 text-md font-bold mb-1" htmlFor={props.id}>
+            <label className="block tracking-wide text-gray-700 text-xs font-bold mb-1" htmlFor={props.id}>
                 {props.label}
                 <span className={props.validRule ? "text-green-400" : "hidden"}>
                     <FontAwesomeIcon icon={faCheck} />
@@ -36,7 +36,8 @@ const SelectSearch = (props) => {
                         boxShadow: "none",
                         borderRadius: 0,
                         //borderColor: props.validRule ? 'green' : 'red',
-                        padding: "2px",
+                        padding: "1px",
+                        fontSize: '12px',
                         backgroundColor: "rgb(241 245 249)",
                         cursor: "pointer",
                         ":hover": {

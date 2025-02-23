@@ -123,23 +123,6 @@ const AddNewProject = () => {
         <>
             <form className="w-full" onSubmit={handleSubmit}>
                 <div className="grid grid-cols-3 gap-4">
-                    {/* <div className="text-center col-span-2 font-bold p-4 bg-slate-100 mb-4">Add New Project</div> */}
-                    {/* <div className="">
-                        <Label htmlFor="designConfig" nameOfLabel="Select Configuration" validRule={validDesignConfig} nameOfState={designData}/>
-                        <SelectComponent 
-                            id="designConfig" 
-                            values={designData}
-                            defaultValue="Select Configuration" 
-                            onChange={event => setDesignConfig(event.target.value)}
-                            ariaInvalid={validDesignConfig ? "false" : "true"}
-                            ariaDescribedby="designConfigNote"
-                            onFocus={()=>setDesignConfigFocus(true)}
-                            onBlur={()=>setDesignConfigFocus(false)}
-                            focusValue={designConfigFocus}
-                            validValue={validDesignConfig}
-                            errorMesg="Please select from the drop down list"
-                        />
-                    </div> */}
                     <div>
                         <SelectSearch
                             id="designConfig"
@@ -227,8 +210,8 @@ const AddNewProject = () => {
                     </div>
                 </div>
                 <div className="mt-4">
-                    <button className="bg-slate-300 hover:bg-orange-400 hover:text-white text-gray-800 p-2 font-bold inline-flex items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="size-6">
+                    <button className="bg-slate-300 hover:bg-orange-400 text-sm hover:text-white text-gray-800 p-2 font-bold inline-flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="size-4">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
                         </svg>
                         <span className="text-md">Create Project</span>
