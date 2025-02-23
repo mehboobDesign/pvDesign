@@ -153,7 +153,7 @@ const ConfigureProject = () => {
         setValidTrackerWidth(result);
     }, [trackerWidth]);
     useEffect(() => {
-        const result = ONLY_INTEGER.test(limitProfileAngle);
+        const result = DOUBLE_TYPE.test(limitProfileAngle);
         setValidLimitProfileAngle(result);
     }, [limitProfileAngle]);
     useEffect(() => {
@@ -314,65 +314,6 @@ const ConfigureProject = () => {
                             validValue={validInverterName}
                             errorMsg="Please select one inverter module from the list."
                         />
-                        {/* <Label htmlFor="inverterName" nameOfLabel="Select Inverter Module"/>
-                        <Select
-                            id="inverterName"
-                            options={inverterData}
-                            getOptionLabel={(op)=>op.manufacturer}
-                            value={inverterName}
-                            placeholder="Search"
-                            onChange={(options) =>
-                                !options ? setInverterName("") : setSelectedInverterName(options)
-                              }
-                            isClearable={true}
-                            isSearchable={true}
-                            noOptionsMessage={()=>"No inverter module found"}
-                            styles={{
-                                control: (baseStyles) => ({
-                                    ...baseStyles,
-                                    border:"none",
-                                    boxShadow: "none",
-                                    padding:"2px",
-                                    backgroundColor:"rgb(241 245 249)",
-                                    cursor:"pointer",
-                                    ":hover":{
-                                        backgroundColor:"rgb(226 232 240)"
-                                    },
-                                    
-                                }),
-                                option: (baseStyles) => ({
-                                    ...baseStyles,
-                                    backgroundColor: "rgb(241 245 249)",
-                                    color:"rgb(51 65 85)",
-                                    cursor:"pointer",
-                                    ":hover":{
-                                        backgroundColor:"rgb(226 232 240)"
-                                    }
-                                })
-                            }}
-                        /> */}
-
-
-                        {/* <Input id="inverterName" value={inverterName} autoComplete="off" 
-                            placeHolder="Search"
-                            onChange={(e)=>setInverterName(e.target.value)}
-                            onFocus={()=>setInverterSuggestionFlag(true)}
-                        />
-                        {inverterSuggestionFlag && <div className="absolute top-[160px] bg-slate-600 w-64 left-[305px]">
-                        {inverterData.filter(item => {
-                            const searchTerm = inverterName.toLowerCase();
-                            const manufac_name = item.manufacturer.toLowerCase();
-                            return searchTerm === '' ?
-                            item
-                             :
-                            searchTerm && manufac_name.startsWith(searchTerm) && manufac_name !== searchTerm;
-                        })
-                        .map((data,index) => ( 
-                        <div key={index} className='shadow-xl text-white hover:bg-slate-700 cursor-pointer'>
-                             <p onClick={()=>setSelectedInverterName(data.manufacturer,data.inverter_id)} className='text-md font-bold p-4'>{data.inverter_id} {data.manufacturer}</p>
-                        </div> 
-                         ))} 
-                     </div>} */}
                     </div>
                     <div className="w-full md:w-1/4 px-3 mb-4">
                         <SelectSearch
@@ -393,80 +334,6 @@ const ConfigureProject = () => {
                             validValue={validPvModuleName}
                             errorMsg="Please select one PV module from the list."
                         />
-
-
-                        {/* <Label htmlFor="pvModuleName" nameOfLabel="Select Pv Module" validRule={validPvModuleName} nameOfState={pvModuleName} />
-                        <label className="block tracking-wide text-gray-700 text-md font-bold mb-1" htmlFor="pvModuleName">
-                Assam
-                <span className={validPvModuleName ? "text-green-400" : "hidden"}>
-                   Right
-                </span>
-                <span className={validPvModuleName ? "hidden" : "text-red-400"}>
-                    Wrong
-                </span>
-            </label>
-                        <Select
-                            id="pvModuleName"
-                            options={pvModuleData}
-                            getOptionLabel={(op)=>op.manufacturer}
-                            value={pvModuleName}
-                            placeholder="Search"
-                            onChange={(options) =>
-                                !options ? setPvModuleName("") : setSelectedPvModuleName(options)
-                              }
-                            isClearable={true}
-                            isSearchable={true}
-                            noOptionsMessage={()=>"No Pv Module found"}
-                            onFocus={()=>setPvModuleNameFocus(true)}
-                            onBlur={()=>setPvModuleNameFocus(false)}
-                            styles={{
-                                control: (baseStyles) => ({
-                                    ...baseStyles,
-                                    border:"none",
-                                    boxShadow: "none",
-                                    padding:"2px",
-                                    backgroundColor:"rgb(241 245 249)",
-                                    cursor:"pointer",
-                                    ":hover":{
-                                        backgroundColor:"rgb(226 232 240)"
-                                    },
-                                    
-                                }),
-                                option: (baseStyles) => ({
-                                    ...baseStyles,
-                                    backgroundColor: "rgb(241 245 249)",
-                                    color:"rgb(51 65 85)",
-                                    cursor:"pointer",
-                                    ":hover":{
-                                        backgroundColor:"rgb(226 232 240)"
-                                    }
-                                })
-                            }}
-                        />
-                        <p className={`${pvModuleNameFocus && !validPvModuleName
-                    ? "text-red-400" : "hidden"}`}>
-                    Assam
-                </p> */}
-                        {/* <Input id="pvModuleName" value={pvModuleName} autoComplete="off" 
-                            placeHolder="Search"
-                            onChange={(e)=>setPvModuleName(e.target.value)}
-                            onFocus={()=>setPvModuleSuggestionFlag(true)}
-                        />
-                        {pvModuleSuggestionFlag && <div className="absolute top-[160px] left-[680px] bg-slate-600 w-64 ml-2">
-                        {pvModuleData.filter(item => {
-                            const searchTerm = pvModuleName.toLowerCase();
-                            const manufac_name = item.manufacturer.toLowerCase();
-                            return searchTerm === '' ?
-                            item
-                             :
-                            searchTerm && manufac_name.startsWith(searchTerm) && manufac_name !== searchTerm;
-                        })
-                        .map((data,index) => ( 
-                        <div key={index} className='shadow-xl text-white hover:bg-slate-700 cursor-pointer'>
-                             <p onClick={()=>setSelectedPvModuleName(data.manufacturer,data.pvmodule_id)} className='text-md font-bold p-4'>{data.pvmodule_id} {data.manufacturer}</p>
-                        </div> 
-                         ))} 
-                     </div>} */}
                     </div>
                     <div className="w-full md:w-1/4 mb-4">
                         <Label htmlFor="design_name" nameOfLabel="Design Name" validRule={validDesignName} nameOfState={designName} />
@@ -703,9 +570,9 @@ const ConfigureProject = () => {
                         />
                     </div>
                     <div className="w-full">
-                        <button className="bg-slate-300 hover:bg-orange-400 hover:text-white text-gray-800 p-2 font-bold inline-flex items-center">
+                        <button className="bg-slate-300 hover:bg-orange-400 hover:text-white text-sm text-gray-800 p-2 font-bold inline-flex items-center">
                             {/* <FontAwesomeIcon className="p-2" icon={faFileExport} size="1x" /> */}
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="size-6">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="size-4">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 3.75V16.5L12 14.25 7.5 16.5V3.75m9 0H18A2.25 2.25 0 0 1 20.25 6v12A2.25 2.25 0 0 1 18 20.25H6A2.25 2.25 0 0 1 3.75 18V6A2.25 2.25 0 0 1 6 3.75h1.5m9 0h-9" />
                             </svg>
                             <span className="text-md">Save Configuration</span>

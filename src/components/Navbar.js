@@ -29,7 +29,7 @@ const Navbar = () => {
         </div>
         <div className='font-bold text-stone-600'>Welcome {auth.userEmail} </div>
         {toogle && <ul className='font-normal bg-neutral-200 dark:bg-slate-700 text-cyan-50 absolute top-16 right-0 w-60 flex flex-col items-start  p-2 border-[0.1px] border-slate-800'>
-          <li className='flex w-full justify-between'>
+          {/* <li className='flex w-full justify-between'>
             <Link onClick={closeMenu} className='flex w-full justify-between hover:text-lime-300 hover:bg-slate-900 cursor-pointer rounded-r-lg border-l-transparent hover:border-l-lime-300 border-l-4 p-4' to='disposedList'>Dispose Case</Link>
           </li>
           <li className='flex w-full justify-between'>
@@ -40,7 +40,7 @@ const Navbar = () => {
           </li>
           <li className='flex w-full justify-between'>
             <Link onClick={closeMenu} className='flex w-full justify-between hover:text-lime-300 hover:bg-slate-900 cursor-pointer rounded-r-lg border-l-transparent hover:border-l-lime-300 border-l-4 p-4' to='addCase'>Add Case</Link>
-          </li>
+          </li> */}
           <li className='flex w-full justify-between'>
             <Link onClick={logout} className='flex w-full justify-between hover:text-lime-300 hover:bg-slate-900 cursor-pointer rounded-r-lg border-l-transparent hover:border-l-lime-300 border-l-4 p-4' to='/'>Logout</Link>
           </li>

@@ -428,15 +428,15 @@ const InverterModuleUpdateModal = ({ modalOpen, onClose, dataId, setUpdating }) 
     return (
         <>
             <div className={`fixed inset-0 flex justify-center items-center transition-colors
-        ${modalOpen ? "visible bg-black/50" : "invisible"}`}>
+        ${modalOpen ? "visible bg-black/60" : "invisible"} z-30`}>
                 <div onClick={(e) => e.stopPropagation()}
-                    className={`bg-white shadow transition-all w-10/12 mt-16
+                    className={`bg-white shadow transition-all w-11/12
             ${modalOpen ? "scale-100 opacity-100" : "scale-125 opacity-0"}`}>
                     {/* <button onClick={onClose} className="absolute top-2 right-2 p-2 font-bold text-gray-400 bg-white
                 hover:bg-gray-50 hover:text-red-500">X</button> */}
-                    <h3 className='text-lg text-center font-black text-gray-800 p-3 bg-slate-200'>Update Inverter Module Details</h3>
+                    <h3 className='text-lg text-center font-black text-gray-800 p-4 bg-slate-200'>Update Inverter Module Details</h3>
                     <form className="pt-2" onSubmit={handleSubmit}>
-                        <div className="flex flex-wrap p-2">
+                        <div className="flex flex-wrap p-4">
                             <div className="w-1/4 pr-2 mb-4">
                                 <Label htmlFor="inverter_type" nameOfLabel="Inverter Type" validRule={validInverterType} nameOfState={inverterType} />
                                 <Input id="inverter_type" value={inverterType} autoComplete="off"
@@ -907,7 +907,7 @@ const InverterModuleUpdateModal = ({ modalOpen, onClose, dataId, setUpdating }) 
                                 />
                             </div>
                         </div>
-                        <div className="p-2 sm:flex sm:flex-row-reverse sm:px-6 justify-center items-center border-t-2 border-slate-200">
+                        <div className="p-4 sm:flex sm:flex-row-reverse sm:px-6 justify-center items-center border-t-2 border-slate-200">
                             <button type="button" className="inline-flex w-full justify-center bg-gray-300 px-4 py-1 text-sm font-semibold text-slate-800 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-red-500 hover:text-white sm:mt-0 sm:w-auto" onClick={onClose}>Cancel</button>
                             <button className="inline-flex w-full justify-center bg-green-600 px-4 py-1 text-sm font-semibold text-white shadow-sm hover:bg-green-700 sm:ml-3 sm:w-auto">Update</button>
                         </div>

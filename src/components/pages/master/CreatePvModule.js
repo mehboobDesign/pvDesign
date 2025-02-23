@@ -131,15 +131,15 @@ const CreatePvModule = () => {
         setValidModelName(result);
     }, [modelName]);
     useEffect(() => {
-        const result = ALPHA_NUMERIC.test(type);
+        const result = USER_REGEX.test(type);
         setValidType(result);
     }, [type]);
     useEffect(() => {
-        const result = ONLY_INTEGER.test(lightInDeg);
+        const result = NUMBER_DECIMAL.test(lightInDeg);
         setValidLightInDeg(result);
     }, [lightInDeg]);
     useEffect(() => {
-        const result = ONLY_INTEGER.test(panelWattage);
+        const result = ALPHA_NUMERIC.test(panelWattage);
         setValidPanelWattage(result);
     }, [panelWattage]);
     useEffect(() => {
@@ -155,7 +155,7 @@ const CreatePvModule = () => {
         setValidBackIrr(result);
     }, [backIrr]);
     useEffect(() => {
-        const result = ONLY_INTEGER.test(mismatchLoss);
+        const result = NUMBER_DECIMAL.test(mismatchLoss);
         setValidMismatchLoss(result);
     }, [mismatchLoss]);
     useEffect(() => {
@@ -167,19 +167,19 @@ const CreatePvModule = () => {
         setValidMaxPowerCurrent(result);
     }, [maxPowerCurrent]);
     useEffect(() => {
-        const result = NUMBER_DECIMAL.test(tempPmax);
+        const result = ALPHA_NUMERIC.test(tempPmax);
         setValidTempPmax(result);
     }, [tempPmax]);
     useEffect(() => {
-        const result = NUMBER_DECIMAL.test(tempVoc);
+        const result = ALPHA_NUMERIC.test(tempVoc);
         setValidTempVoc(result);
     }, [tempVoc]);
     useEffect(() => {
-        const result = NUMBER_DECIMAL.test(tempIsc);
+        const result = ALPHA_NUMERIC.test(tempIsc);
         setValidTempIsc(result);
     }, [tempIsc]);
     useEffect(() => {
-        const result = NUMBER_DECIMAL.test(moduleLength);
+        const result = ONLY_INTEGER.test(moduleLength);
         setValidModuleLength(result);
     }, [moduleLength]);
     useEffect(() => {
@@ -187,15 +187,15 @@ const CreatePvModule = () => {
         setValidModuleDeLoss(result);
     }, [moduleDeLoss]);
     useEffect(() => {
-        const result = ONLY_INTEGER.test(moduleQualityLoss);
+        const result = NUMBER_DECIMAL.test(moduleQualityLoss);
         setValidModuleQualityLoss(result);
     }, [moduleQualityLoss]);
     useEffect(() => {
-        const result = NUMBER_DECIMAL.test(moduleBreadth);
+        const result = ONLY_INTEGER.test(moduleBreadth);
         setValidModuleBreadth(result);
     }, [moduleBreadth]);
     useEffect(() => {
-        const result = NUMBER_DECIMAL.test(moduleThickness);
+        const result = ONLY_INTEGER.test(moduleThickness);
         setValidModuleThickness(result);
     }, [moduleThickness]);
     useEffect(() => {
@@ -211,15 +211,15 @@ const CreatePvModule = () => {
         setValidModuleStrings(result);
     }, [moduleStrings]);
     useEffect(() => {
-        const result = ONLY_INTEGER.test(ohmicWiLoss);
+        const result = NUMBER_DECIMAL.test(ohmicWiLoss);
         setValidOhmicWiLoss(result);
     }, [ohmicWiLoss]);
     useEffect(() => {
-        const result = ONLY_INTEGER.test(pvLossIrr);
+        const result = NUMBER_DECIMAL.test(pvLossIrr);
         setValidPvLossIrr(result);
     }, [pvLossIrr]);
     useEffect(() => {
-        const result = ONLY_INTEGER.test(pvLossTemp);
+        const result = NUMBER_DECIMAL.test(pvLossTemp);
         setValidPvLossTemp(result);
     }, [pvLossTemp]);
 
