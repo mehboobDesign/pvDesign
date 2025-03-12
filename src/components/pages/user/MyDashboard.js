@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import UseAuth from "../../Hooks/UseAuth";
 import Axios from "../../../api/Axios";
 import UpdateProjectModal from "../../Common/Modal/UpdateProjectModal";
-//import UpdateDesignModal from '../../Common/Modal/UpdateDesignModal';
 import MyGraph from "./MyGraph";
 import AlertModal from "../../Common/Modal/AlertModal";
 const MY_PROJECT = 'v1/projects/byuser/';
@@ -14,10 +13,8 @@ const MyDashboard = () => {
     const { auth } = UseAuth();
     const [projectData, setProjectData] = useState([]);
     const [projectId, setProjectId] = useState('');
-    //const [designId, setDesignId] = useState('');
     const [modalOpen, setModalOpen] = useState(false);
     const [updating, setUpdating] = useState(false);
-    //const [designModal, setDesignModal] = useState(false);
     const [showGraph, setShowGraph] = useState(false);
     const [errorAlert, setErrorAlert] = useState(false);
     const [successAlert, setSuccessAlert] = useState(false);
@@ -41,14 +38,10 @@ const MyDashboard = () => {
         }
     }, [auth.userId, updating]);
     const editProject = (p_id) => {
-        //console.log(p_id);
         setProjectId(p_id);
         setModalOpen(true);
     };
-    // const editDesign = (des_id) => {
-    //     setDesignId(des_id);
-    //     setDesignModal(true);
-    // };
+
     const calculateIrridationData = async (project_id) => {
         const data = [
             {
