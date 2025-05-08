@@ -2,7 +2,7 @@ import React from "react";
 import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-const Input = ({ id, value, placeHolder, autoComplete, onChange, aria_invalid, aria_describedby, onFocus, onBlur, focusValue, validValue, errorMesg }) => {
+const Input = ({ id, value, placeHolder, autoComplete, onChange, aria_invalid, aria_describedby, onFocus, onBlur, disabled, focusValue, validValue, errorMesg }) => {
     return (
         <>
             <input
@@ -18,6 +18,7 @@ const Input = ({ id, value, placeHolder, autoComplete, onChange, aria_invalid, a
                 aria-describedby={aria_describedby}
                 onFocus={onFocus}
                 onBlur={onBlur}
+                disabled={disabled}
             />
             <p id={aria_describedby} className={`${focusValue && !validValue
                 ? "text-red-400" : "hidden"} text-sm`}>
