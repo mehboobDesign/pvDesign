@@ -1,12 +1,15 @@
-import React, { useState, useEffect } from "react";
-//import SelectComponent from "../../Common/SelectComponent";
+import React, { useState, useEffect, useRef } from "react";
 import Axios from "../../../api/Axios";
 import Label from "../../Common/Label";
 import Input from "../../Common/Input";
-import { NOT_SPECIAL_CHAR, DIRECTION, VALID_YEAR } from '../../Common/ValidationConstants';
+import { NOT_SPECIAL_CHAR, DIRECTION, VALID_YEAR, CHAR_REGEX } from '../../Common/ValidationConstants';
 import AlertModal from "../../Common/Modal/AlertModal";
 import SelectSearch from "../../Common/SelectSearch";
 import UseAuth from "../../Hooks/UseAuth";
+
+import { StandaloneSearchBox, useJsApiLoader } from "@react-google-maps/api";
+
+const libraries = ['places'];
 
 const NEW_PROJECT = 'v1/projects/create/design/';
 
@@ -30,11 +33,11 @@ const AddNewProject = () => {
 
     const [latitude, setLatitude] = useState('');
     const [validLatitude, setValidLatitude] = useState(false);
-    const [latitudeFocus, setLatitudeFocus] = useState(false);
+    //const [latitudeFocus, setLatitudeFocus] = useState(false);
 
     const [longitude, setLongitude] = useState('');
     const [validLongitude, setValidLongitude] = useState(false);
-    const [longitudeFocus, setLongitudeFocus] = useState(false);
+    //const [longitudeFocus, setLongitudeFocus] = useState(false);
 
     const [year, setYear] = useState('');
     const [validYear, setValidYear] = useState(false);
@@ -42,6 +45,27 @@ const AddNewProject = () => {
 
     const [errorAlert, setErrorAlert] = useState(false);
     const [successAlert, setSuccessAlert] = useState(false);
+
+    const inputRef = useRef();
+    let libRef = useRef(libraries)
+    const { isLoaded } = useJsApiLoader({
+        id: 'google-map-script',
+        googleMapsApiKey: "AIzaSyDGvl0xsp0pyya9Gi3FbR-p-Ojf4zYb-Xo",
+        libraries: libRef.current,
+    })
+
+    const handlePlaceChanged = () => {
+        const [place] = inputRef.current.getPlaces();
+
+        if (place) {
+            console.log(place.formatted_address);
+            setProjectLocation(place.formatted_address)
+            console.log(place.geometry.location.lat());
+            setLatitude(place.geometry.location.lat());
+            console.log(place.geometry.location.lng());
+            setLongitude(place.geometry.location.lng());
+        }
+    };
 
     useEffect(() => {
         if (designName === 'Search' || designName === '') {
@@ -55,7 +79,7 @@ const AddNewProject = () => {
         setValidProjectName(result);
     }, [projectName]);
     useEffect(() => {
-        const result = NOT_SPECIAL_CHAR.test(projectLocation);
+        const result = CHAR_REGEX.test(projectLocation);
         setValidProjectLocation(result);
     }, [projectLocation]);
     useEffect(() => {
@@ -119,6 +143,8 @@ const AddNewProject = () => {
         setDesignId(selectedName.designId);
     };
 
+
+
     return (
         <>
             <form className="w-full" onSubmit={handleSubmit}>
@@ -158,42 +184,59 @@ const AddNewProject = () => {
                     </div>
                     <div className="">
                         <Label htmlFor="project_location" nameOfLabel="Project Location" validRule={validProjectLocation} nameOfState={projectLocation} />
-                        <Input id="project_location" value={projectLocation} autoComplete="off"
-                            onChange={(e) => setProjectLocation(e.target.value)}
-                            aria_invalid={validProjectLocation ? "false" : "true"}
-                            aria_describedby="projectLocationNote"
-                            onFocus={() => setProjectLocationFocus(true)}
-                            onBlur={() => setProjectLocationFocus(false)}
-                            focusValue={projectLocationFocus}
-                            validValue={validProjectLocation}
-                            errorMesg="Special characters are not allowed and minimum length should be 3."
-                        />
+                        {isLoaded &&
+                            <StandaloneSearchBox
+                                onLoad={ref => (inputRef.current = ref)}
+                                onPlacesChanged={handlePlaceChanged}
+                            >
+                                <Input id="project_location"
+                                    placeHolder="Enter Location" value={projectLocation}
+                                    onChange={(e) => setProjectLocation(e.target.value)}
+                                    aria_invalid={validProjectLocation ? "false" : "true"}
+                                    aria_describedby="projectLocationNote"
+                                    onFocus={() => setProjectLocationFocus(true)}
+                                    onBlur={() => setProjectLocationFocus(false)}
+                                    focusValue={projectLocationFocus}
+                                    validValue={validProjectLocation}
+                                    errorMesg="Minimum length should be 3."
+                                />
+                            </StandaloneSearchBox>
+                        }
                     </div>
-                    <div className="">
+                    <div className="
+                    relative 
+                    before:content-[attr(data-tip)]
+                    before:absolute
+                    before:px-3 before:py-2
+                    before:left-1/2 before:top-5
+                    before:w-max before:max-w-xs
+                    before:-translate-x-1/2 before:-translate-y-full
+                    before:bg-gray-700 before:text-white
+                    before:rounded-md before:opacity-0
+                    before:transition-all
+                    text-xs
+                    
+                    after:absolute
+                    after:left-1/2 after:top-5
+                    after:h-0 after:w-0 
+                    after:-translate-x-1/2 after:border-8 
+                    after:border-t-gray-700  
+                    after:border-l-transparent
+                    after:border-b-transparent 
+                    after:border-r-transparent
+                    after:opacity-0
+                    after:transition-all
+
+                    hover:before:opacity-100 hover:after:opacity-100
+                    
+
+                     " data-tip="Disabled filed. Please enter Project Location">
                         <Label htmlFor="latitude" nameOfLabel="Latitude" validRule={validLatitude} nameOfState={latitude} />
-                        <Input id="latitude" value={latitude} autoComplete="off"
-                            onChange={(e) => setLatitude(e.target.value)}
-                            aria_invalid={validLatitude ? "false" : "true"}
-                            aria_describedby="latitudeNote"
-                            onFocus={() => setLatitudeFocus(true)}
-                            onBlur={() => setLatitudeFocus(false)}
-                            focusValue={latitudeFocus}
-                            validValue={validLatitude}
-                            errorMesg="Special characters are not allowed and minimum length should be 3."
-                        />
+                        <Input id="latitude" value={latitude} disabled={true} />
                     </div>
                     <div className="">
                         <Label htmlFor="longitude" nameOfLabel="Longitude" validRule={validLongitude} nameOfState={longitude} />
-                        <Input id="longitude" value={longitude} autoComplete="off"
-                            onChange={(e) => setLongitude(e.target.value)}
-                            aria_invalid={validLongitude ? "false" : "true"}
-                            aria_describedby="longitudeNote"
-                            onFocus={() => setLongitudeFocus(true)}
-                            onBlur={() => setLongitudeFocus(false)}
-                            focusValue={longitudeFocus}
-                            validValue={validLongitude}
-                            errorMesg="Special characters are not allowed and minimum length should be 3."
-                        />
+                        <Input id="longitude" value={longitude} disabled={true} />
                     </div>
                     <div className="">
                         <Label htmlFor="year" nameOfLabel="Year" validRule={validYear} nameOfState={year} />
