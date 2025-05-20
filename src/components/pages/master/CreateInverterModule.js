@@ -2,8 +2,9 @@ import React, { useState, useRef, useEffect } from "react";
 import { faFileExport, faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-    USER_REGEX, NUMBER_DECIMAL, ALPHA_NUMERIC, DOUBLE_TYPE
-    , ONLY_INTEGER
+    NUMBER_DECIMAL, ALPHA_NUMERIC, DOUBLE_TYPE
+    , ONLY_INTEGER,
+    ONE_TO_100
 } from '../../Common/ValidationConstants';
 import Axios from "../../../api/Axios";
 import AlertModal from "../../Common/Modal/AlertModal";
@@ -167,11 +168,11 @@ const CreateInverterModule = () => {
         userRef.current.focus();
     }, []);
     useEffect(() => {
-        const result = USER_REGEX.test(inverterType);
+        const result = ALPHA_NUMERIC.test(inverterType);
         setValidInverterType(result);
     }, [inverterType]);
     useEffect(() => {
-        const result = USER_REGEX.test(manufacturerName);
+        const result = ALPHA_NUMERIC.test(manufacturerName);
         setValidManufacturerName(result);
     }, [manufacturerName]);
     useEffect(() => {
@@ -251,63 +252,63 @@ const CreateInverterModule = () => {
         setValidPnomRatio(result);
     }, [pnomRatio]);
     useEffect(() => {
-        const result = DOUBLE_TYPE.test(inverterLossDuringOperation);
+        const result = ONE_TO_100.test(inverterLossDuringOperation);
         setValidInverterLossDuringOperation(result);
     }, [inverterLossDuringOperation]);
     useEffect(() => {
-        const result = DOUBLE_TYPE.test(inverterLossNominalInverterPower);
+        const result = ONE_TO_100.test(inverterLossNominalInverterPower);
         setValidInverterLossNominalInverterPower(result);
     }, [inverterLossNominalInverterPower]);
     useEffect(() => {
-        const result = DOUBLE_TYPE.test(inverterLossMaxInputCurrent);
+        const result = ONE_TO_100.test(inverterLossMaxInputCurrent);
         setValidInverterLossMaxInputCurrent(result);
     }, [inverterLossMaxInputCurrent]);
     useEffect(() => {
-        const result = DOUBLE_TYPE.test(inverterLossNominalInverterVoltage);
+        const result = ONE_TO_100.test(inverterLossNominalInverterVoltage);
         setValidInverterLossNominalInverterVoltage(result);
     }, [inverterLossNominalInverterVoltage]);
     useEffect(() => {
-        const result = DOUBLE_TYPE.test(inverterLossPowerThreshold);
+        const result = ONE_TO_100.test(inverterLossPowerThreshold);
         setValidInverterLossPowerThreshold(result);
     }, [inverterLossPowerThreshold]);
     useEffect(() => {
-        const result = DOUBLE_TYPE.test(inverterLossVoltageThreshold);
+        const result = ONE_TO_100.test(inverterLossVoltageThreshold);
         setValidInverterLossVoltageThreshold(result);
     }, [inverterLossVoltageThreshold]);
     useEffect(() => {
-        const result = DOUBLE_TYPE.test(nightConsumption);
+        const result = ONE_TO_100.test(nightConsumption);
         setValidNightConsumption(result);
     }, [nightConsumption]);
     useEffect(() => {
-        const result = DOUBLE_TYPE.test(auxiliaries);
+        const result = ONE_TO_100.test(auxiliaries);
         setValidAuxiliaries(result);
     }, [auxiliaries]);
     useEffect(() => {
-        const result = DOUBLE_TYPE.test(acOhmicLoss);
+        const result = ONE_TO_100.test(acOhmicLoss);
         setValidAcOhmicLoss(result);
     }, [acOhmicLoss]);
     useEffect(() => {
-        const result = DOUBLE_TYPE.test(mediumVoltageTransfoLoss);
+        const result = ONE_TO_100.test(mediumVoltageTransfoLoss);
         setValidMediumVoltageTransfoLoss(result);
     }, [mediumVoltageTransfoLoss]);
     useEffect(() => {
-        const result = DOUBLE_TYPE.test(mvLineOhmicLoss);
+        const result = ONE_TO_100.test(mvLineOhmicLoss);
         setValidMvLineOhmicLoss(result);
     }, [mvLineOhmicLoss]);
     useEffect(() => {
-        const result = DOUBLE_TYPE.test(highVoltageTransfoLoss);
+        const result = ONE_TO_100.test(highVoltageTransfoLoss);
         setValidHighVoltageTransfoLoss(result);
     }, [highVoltageTransfoLoss]);
     useEffect(() => {
-        const result = DOUBLE_TYPE.test(hvLineOhmicLoss);
+        const result = ONE_TO_100.test(hvLineOhmicLoss);
         setValidHvLineOhmicLoss(result);
     }, [hvLineOhmicLoss]);
     useEffect(() => {
-        const result = DOUBLE_TYPE.test(systemUnavailability);
+        const result = ONE_TO_100.test(systemUnavailability);
         setValidSystemUnavailability(result);
     }, [systemUnavailability]);
     useEffect(() => {
-        const result = DOUBLE_TYPE.test(unusedEnergy);
+        const result = ONE_TO_100.test(unusedEnergy);
         setValidUnusedEnergy(result);
     }, [unusedEnergy]);
 
@@ -346,21 +347,21 @@ const CreateInverterModule = () => {
                 unit_nom_power: unitNomPower,
                 max_powerAtGivenTemp: maxPowerGivenTemp,
                 pnomRatio: pnomRatio,
-                inverterLossDuringOperation: inverterLossDuringOperation,
-                inverterLossOverNominalInverterPower: inverterLossNominalInverterPower,
-                inverterLossDueToMaxInputCurrent: inverterLossMaxInputCurrent,
-                inverterLossOverNominalInverterVoltage: inverterLossNominalInverterVoltage,
-                inverterLossDueToPowerThreshold: inverterLossPowerThreshold,
-                inverterLossDueToVoltageThreshold: inverterLossVoltageThreshold,
-                nightConsumption: nightConsumption,
-                auxiliaries: auxiliaries,
-                acOhmicLoss: acOhmicLoss,
-                mediumVoltageTransfoLoss: mediumVoltageTransfoLoss,
-                mvLineOhmicLoss: mvLineOhmicLoss,
-                highVoltageTransfoLoss: highVoltageTransfoLoss,
-                hvLineOhmicLoss: hvLineOhmicLoss,
-                systemUnavailability: systemUnavailability,
-                unusedEnergy: unusedEnergy,
+                inverterLossDuringOperation: inverterLossDuringOperation / 100,
+                inverterLossOverNominalInverterPower: inverterLossNominalInverterPower / 100,
+                inverterLossDueToMaxInputCurrent: inverterLossMaxInputCurrent / 100,
+                inverterLossOverNominalInverterVoltage: inverterLossNominalInverterVoltage / 100,
+                inverterLossDueToPowerThreshold: inverterLossPowerThreshold / 100,
+                inverterLossDueToVoltageThreshold: inverterLossVoltageThreshold / 100,
+                nightConsumption: nightConsumption / 100,
+                auxiliaries: auxiliaries / 100,
+                acOhmicLoss: acOhmicLoss / 100,
+                mediumVoltageTransfoLoss: mediumVoltageTransfoLoss / 100,
+                mvLineOhmicLoss: mvLineOhmicLoss / 100,
+                highVoltageTransfoLoss: highVoltageTransfoLoss / 100,
+                hvLineOhmicLoss: hvLineOhmicLoss / 100,
+                systemUnavailability: systemUnavailability / 100,
+                unusedEnergy: unusedEnergy / 100,
             }
             try {
                 const response = await Axios.post(CREATE_INVERTER_MODULE, data);
@@ -399,9 +400,7 @@ const CreateInverterModule = () => {
                         <p id="inverterTypeNote" className={inverterTypeFocus && inverterType && !validInverterType
                             ? "text-red-400" : "hidden"}>
                             <FontAwesomeIcon icon={faInfoCircle} />
-                            4 to 24 characters.
-                            Must begin with a letter.
-                            Letters, numbers, underscores, hyphens allowed.
+                            Minimum 3 to maximum 23 Alpha numeric characters are allowed.
                         </p>
                     </div>
                     <div className="w-full md:w-1/4 px-2">
@@ -414,7 +413,7 @@ const CreateInverterModule = () => {
                             onBlur={() => setManufacturerNameFocus(false)}
                             focusValue={manufacturerNameFocus}
                             validValue={validManufacturerName}
-                            errorMesg="4 to 24 characters. Must begin with a letter. Letters, numbers, underscores, hyphens allowed."
+                            errorMesg="Minimum 3 to maximum 23 Alpha numeric characters are allowed."
                         />
                     </div>
                     <div className="w-full md:w-1/4 px-2">
@@ -427,7 +426,7 @@ const CreateInverterModule = () => {
                             onBlur={() => setModelNameFocus(false)}
                             focusValue={modelNameFocus}
                             validValue={validModelName}
-                            errorMesg="4 to 24 characters. Must begin with a letter. Letters, numbers, underscores, hyphens allowed."
+                            errorMesg="Minimum 3 to maximum 23 Alpha numeric characters are allowed."
                         />
                     </div>
                     <div className="w-full md:w-1/4 px-2">
@@ -675,7 +674,7 @@ const CreateInverterModule = () => {
                         />
                     </div>
                     <div className="w-full md:w-1/4 px-2">
-                        <Label htmlFor="inverter_loss_during_operation" nameOfLabel="Inverter Loss during Operation" validRule={validInverterLossDuringOperation} nameOfState={inverterLossDuringOperation} />
+                        <Label htmlFor="inverter_loss_during_operation" nameOfLabel="Inverter Loss during Operation (%)" validRule={validInverterLossDuringOperation} nameOfState={inverterLossDuringOperation} />
                         <Input id="inverter_loss_during_operation" value={inverterLossDuringOperation} autoComplete="off"
                             onChange={(e) => setInverterLossDuringOperation(e.target.value)}
                             aria_invalid={validInverterLossDuringOperation ? "false" : "true"}
@@ -684,11 +683,11 @@ const CreateInverterModule = () => {
                             onBlur={() => setInverterLossDuringOperationFocus(false)}
                             focusValue={inverterLossDuringOperationFocus}
                             validValue={validInverterLossDuringOperation}
-                            errorMesg="Only numbers allowed with decimal or not."
+                            errorMesg="Value should be between 0 to 100."
                         />
                     </div>
                     <div className="w-full md:w-1/4 px-2">
-                        <Label htmlFor="inverter_loss_nominal_inverter" nameOfLabel="Inverter Loss Over Nominal Inverter Power" validRule={validInverterLossNominalInverterPower} nameOfState={inverterLossNominalInverterPower} />
+                        <Label htmlFor="inverter_loss_nominal_inverter" nameOfLabel="Inverter Loss Over Nominal Inverter Power (%)" validRule={validInverterLossNominalInverterPower} nameOfState={inverterLossNominalInverterPower} />
                         <Input id="inverter_loss_nominal_inverter" value={inverterLossNominalInverterPower} autoComplete="off"
                             onChange={(e) => setInverterLossNominalInverterPower(e.target.value)}
                             aria_invalid={validInverterLossNominalInverterPower ? "false" : "true"}
@@ -697,11 +696,11 @@ const CreateInverterModule = () => {
                             onBlur={() => setInverterLossNominalInverterPowerFocus(false)}
                             focusValue={inverterLossNominalInverterPowerFocus}
                             validValue={validInverterLossNominalInverterPower}
-                            errorMesg="Only numbers allowed with decimal or not."
+                            errorMesg="Value should be between 0 to 100."
                         />
                     </div>
                     <div className="w-full md:w-1/4 px-2">
-                        <Label htmlFor="inverter_loss_max_current" nameOfLabel="Inverter Loss Due to Maximum Input Current" validRule={validInverterLossMaxInputCurrent} nameOfState={inverterLossMaxInputCurrent} />
+                        <Label htmlFor="inverter_loss_max_current" nameOfLabel="Inverter Loss Due to Maximum Input Current (%)" validRule={validInverterLossMaxInputCurrent} nameOfState={inverterLossMaxInputCurrent} />
                         <Input id="inverter_loss_max_current" value={inverterLossMaxInputCurrent} autoComplete="off"
                             onChange={(e) => setInverterLossMaxInputCurrent(e.target.value)}
                             aria_invalid={validInverterLossMaxInputCurrent ? "false" : "true"}
@@ -710,13 +709,13 @@ const CreateInverterModule = () => {
                             onBlur={() => setInverterLossMaxInputCurrentFocus(false)}
                             focusValue={inverterLossMaxInputCurrentFocus}
                             validValue={validInverterLossMaxInputCurrent}
-                            errorMesg="Only numbers allowed with decimal or not."
+                            errorMesg="Value should be between 0 to 100."
                         />
                     </div>
                 </div>
                 <div className="flex flex-wrap -mx-3 mb-4">
                     <div className="w-full md:w-1/4 px-2">
-                        <Label htmlFor="inverter_loss_nominal_inverter_voltage" nameOfLabel="Inverter Loss Over Nominal Inverter Voltage" validRule={validInverterLossNominalInverterVoltage} nameOfState={inverterLossNominalInverterVoltage} />
+                        <Label htmlFor="inverter_loss_nominal_inverter_voltage" nameOfLabel="Inverter Loss Over Nominal Inverter Voltage (%)" validRule={validInverterLossNominalInverterVoltage} nameOfState={inverterLossNominalInverterVoltage} />
                         <Input id="inverter_loss_nominal_inverter_voltage" value={inverterLossNominalInverterVoltage} autoComplete="off"
                             onChange={(e) => setInverterLossNominalInverterVoltage(e.target.value)}
                             aria_invalid={validInverterLossNominalInverterVoltage ? "false" : "true"}
@@ -725,11 +724,11 @@ const CreateInverterModule = () => {
                             onBlur={() => setInverterLossNominalInverterVoltageFocus(false)}
                             focusValue={inverterLossNominalInverterVoltageFocus}
                             validValue={validInverterLossNominalInverterVoltage}
-                            errorMesg="Only numbers allowed with decimal or not."
+                            errorMesg="Value should be between 0 to 100."
                         />
                     </div>
                     <div className="w-full md:w-1/4 px-2">
-                        <Label htmlFor="inverter_loss_power_threshold" nameOfLabel="Inverter Loss due to Power Threshold" validRule={validInverterLossPowerThreshold} nameOfState={inverterLossPowerThreshold} />
+                        <Label htmlFor="inverter_loss_power_threshold" nameOfLabel="Inverter Loss due to Power Threshold (%)" validRule={validInverterLossPowerThreshold} nameOfState={inverterLossPowerThreshold} />
                         <Input id="inverter_loss_power_threshold" value={inverterLossPowerThreshold} autoComplete="off"
                             onChange={(e) => setInverterLossPowerThreshold(e.target.value)}
                             aria_invalid={validInverterLossPowerThreshold ? "false" : "true"}
@@ -738,11 +737,11 @@ const CreateInverterModule = () => {
                             onBlur={() => setInverterLossPowerThresholdFocus(false)}
                             focusValue={inverterLossPowerThresholdFocus}
                             validValue={validInverterLossPowerThreshold}
-                            errorMesg="Only numbers allowed with decimal or not."
+                            errorMesg="Value should be between 0 to 100."
                         />
                     </div>
                     <div className="w-full md:w-1/4 px-2">
-                        <Label htmlFor="inverter_loss_voltage_threshold" nameOfLabel="Inverter Loss due to Voltage Threshold" validRule={validInverterLossVoltageThreshold} nameOfState={inverterLossVoltageThreshold} />
+                        <Label htmlFor="inverter_loss_voltage_threshold" nameOfLabel="Inverter Loss due to Voltage Threshold (%)" validRule={validInverterLossVoltageThreshold} nameOfState={inverterLossVoltageThreshold} />
                         <Input id="inverter_loss_voltage_threshold" value={inverterLossVoltageThreshold} autoComplete="off"
                             onChange={(e) => setInverterLossVoltageThreshold(e.target.value)}
                             aria_invalid={validInverterLossVoltageThreshold ? "false" : "true"}
@@ -751,11 +750,11 @@ const CreateInverterModule = () => {
                             onBlur={() => setInverterLossVoltageThresholdFocus(false)}
                             focusValue={inverterLossVoltageThresholdFocus}
                             validValue={validInverterLossVoltageThreshold}
-                            errorMesg="Only numbers allowed with decimal or not."
+                            errorMesg="Value should be between 0 to 100."
                         />
                     </div>
                     <div className="w-full md:w-1/4 px-2">
-                        <Label htmlFor="night_consumption" nameOfLabel="Night Consumption" validRule={validNightConsumption} nameOfState={nightConsumption} />
+                        <Label htmlFor="night_consumption" nameOfLabel="Night Consumption (%)" validRule={validNightConsumption} nameOfState={nightConsumption} />
                         <Input id="night_consumption" value={nightConsumption} autoComplete="off"
                             onChange={(e) => setNightConsumption(e.target.value)}
                             aria_invalid={validNightConsumption ? "false" : "true"}
@@ -764,13 +763,13 @@ const CreateInverterModule = () => {
                             onBlur={() => setNightConsumptionFocus(false)}
                             focusValue={nightConsumptionFocus}
                             validValue={validNightConsumption}
-                            errorMesg="Only numbers allowed with decimal or not."
+                            errorMesg="Value should be between 0 to 100."
                         />
                     </div>
                 </div>
                 <div className="flex flex-wrap -mx-3 mb-4">
                     <div className="w-full md:w-1/4 px-2">
-                        <Label htmlFor="auxiliaries" nameOfLabel="Auxiliaries" validRule={validAuxiliaries} nameOfState={auxiliaries} />
+                        <Label htmlFor="auxiliaries" nameOfLabel="Auxiliaries (%)" validRule={validAuxiliaries} nameOfState={auxiliaries} />
                         <Input id="auxiliaries" value={auxiliaries} autoComplete="off"
                             onChange={(e) => setAuxiliaries(e.target.value)}
                             aria_invalid={validAuxiliaries ? "false" : "true"}
@@ -779,11 +778,11 @@ const CreateInverterModule = () => {
                             onBlur={() => setAuxiliariesFocus(false)}
                             focusValue={auxiliariesFocus}
                             validValue={validAuxiliaries}
-                            errorMesg="Only numbers allowed with decimal or not."
+                            errorMesg="Value should be between 0 to 100."
                         />
                     </div>
                     <div className="w-full md:w-1/4 px-2">
-                        <Label htmlFor="acOhmicLoss" nameOfLabel="AC Ohmic Loss" validRule={validAcOhmicLoss} nameOfState={acOhmicLoss} />
+                        <Label htmlFor="acOhmicLoss" nameOfLabel="AC Ohmic Loss (%)" validRule={validAcOhmicLoss} nameOfState={acOhmicLoss} />
                         <Input id="acOhmicLoss" value={acOhmicLoss} autoComplete="off"
                             onChange={(e) => setAcOhmicLoss(e.target.value)}
                             aria_invalid={validAcOhmicLoss ? "false" : "true"}
@@ -792,11 +791,11 @@ const CreateInverterModule = () => {
                             onBlur={() => setAcOhmicLossFocus(false)}
                             focusValue={acOhmicLossFocus}
                             validValue={validAcOhmicLoss}
-                            errorMesg="Only numbers allowed with decimal or not."
+                            errorMesg="Value should be between 0 to 100."
                         />
                     </div>
                     <div className="w-full md:w-1/4 px-2">
-                        <Label htmlFor="medium_vol_transfo_loss" nameOfLabel="Medium Voltage Transformation Loss" validRule={validMediumVoltageTransfoLoss} nameOfState={mediumVoltageTransfoLoss} />
+                        <Label htmlFor="medium_vol_transfo_loss" nameOfLabel="Medium Voltage Transformation Loss (%)" validRule={validMediumVoltageTransfoLoss} nameOfState={mediumVoltageTransfoLoss} />
                         <Input id="medium_vol_transfo_loss" value={mediumVoltageTransfoLoss} autoComplete="off"
                             onChange={(e) => setMediumVoltageTransfoLoss(e.target.value)}
                             aria_invalid={validMediumVoltageTransfoLoss ? "false" : "true"}
@@ -805,11 +804,11 @@ const CreateInverterModule = () => {
                             onBlur={() => setMediumVoltageTransfoLossFocus(false)}
                             focusValue={mediumVoltageTransfoLossFocus}
                             validValue={validMediumVoltageTransfoLoss}
-                            errorMesg="Only numbers allowed with decimal or not."
+                            errorMesg="Value should be between 0 to 100."
                         />
                     </div>
                     <div className="w-full md:w-1/4 px-2">
-                        <Label htmlFor="mv_line_ohmic_loss" nameOfLabel="MV Line Ohmic Loss" validRule={validMvLineOhmicLoss} nameOfState={mvLineOhmicLoss} />
+                        <Label htmlFor="mv_line_ohmic_loss" nameOfLabel="MV Line Ohmic Loss (%)" validRule={validMvLineOhmicLoss} nameOfState={mvLineOhmicLoss} />
                         <Input id="mv_line_ohmic_loss" value={mvLineOhmicLoss} autoComplete="off"
                             onChange={(e) => setMvLineOhmicLoss(e.target.value)}
                             aria_invalid={validMvLineOhmicLoss ? "false" : "true"}
@@ -818,13 +817,13 @@ const CreateInverterModule = () => {
                             onBlur={() => setMvLineOhmicLossFocus(false)}
                             focusValue={mvLineOhmicLossFocus}
                             validValue={validMvLineOhmicLoss}
-                            errorMesg="Only numbers allowed with decimal or not."
+                            errorMesg="Value should be between 0 to 100."
                         />
                     </div>
                 </div>
                 <div className="flex flex-wrap -mx-3 mb-4">
                     <div className="w-full md:w-1/4 px-2">
-                        <Label htmlFor="high_vol_transfo_loss" nameOfLabel="High Voltage Transformation Loss" validRule={validHighVoltageTransfoLoss} nameOfState={highVoltageTransfoLoss} />
+                        <Label htmlFor="high_vol_transfo_loss" nameOfLabel="High Voltage Transformation Loss (%)" validRule={validHighVoltageTransfoLoss} nameOfState={highVoltageTransfoLoss} />
                         <Input id="high_vol_transfo_loss" value={highVoltageTransfoLoss} autoComplete="off"
                             onChange={(e) => setHighVoltageTransfoLoss(e.target.value)}
                             aria_invalid={validHighVoltageTransfoLoss ? "false" : "true"}
@@ -833,11 +832,11 @@ const CreateInverterModule = () => {
                             onBlur={() => setHighVoltageTransfoLossFocus(false)}
                             focusValue={highVoltageTransfoLossFocus}
                             validValue={validHighVoltageTransfoLoss}
-                            errorMesg="Only numbers allowed with decimal or not."
+                            errorMesg="Value should be between 0 to 100."
                         />
                     </div>
                     <div className="w-full md:w-1/4 px-2">
-                        <Label htmlFor="hv_line_ohmic_loss" nameOfLabel="HV Line Ohmic Loss" validRule={validHvLineOhmicLoss} nameOfState={hvLineOhmicLoss} />
+                        <Label htmlFor="hv_line_ohmic_loss" nameOfLabel="HV Line Ohmic Loss (%)" validRule={validHvLineOhmicLoss} nameOfState={hvLineOhmicLoss} />
                         <Input id="hv_line_ohmic_loss" value={hvLineOhmicLoss} autoComplete="off"
                             onChange={(e) => setHvLineOhmicLoss(e.target.value)}
                             aria_invalid={validHvLineOhmicLoss ? "false" : "true"}
@@ -846,11 +845,11 @@ const CreateInverterModule = () => {
                             onBlur={() => setHvLineOhmicLossFocus(false)}
                             focusValue={hvLineOhmicLossFocus}
                             validValue={validHvLineOhmicLoss}
-                            errorMesg="Only numbers allowed with decimal or not."
+                            errorMesg="Value should be between 0 to 100."
                         />
                     </div>
                     <div className="w-full md:w-1/4 px-2">
-                        <Label htmlFor="systemUnavailability" nameOfLabel="System Unavailability" validRule={validSystemUnavailability} nameOfState={systemUnavailability} />
+                        <Label htmlFor="systemUnavailability" nameOfLabel="System Unavailability (%)" validRule={validSystemUnavailability} nameOfState={systemUnavailability} />
                         <Input id="systemUnavailability" value={systemUnavailability} autoComplete="off"
                             onChange={(e) => setSystemUnavailability(e.target.value)}
                             aria_invalid={validSystemUnavailability ? "false" : "true"}
@@ -859,11 +858,11 @@ const CreateInverterModule = () => {
                             onBlur={() => setSystemUnavailabilityFocus(false)}
                             focusValue={systemUnavailabilityFocus}
                             validValue={validSystemUnavailability}
-                            errorMesg="Only numbers allowed with decimal or not."
+                            errorMesg="Value should be between 0 to 100."
                         />
                     </div>
                     <div className="w-full md:w-1/4 px-2">
-                        <Label htmlFor="unusedEnergy" nameOfLabel="Unused Energy" validRule={validUnusedEnergy} nameOfState={unusedEnergy} />
+                        <Label htmlFor="unusedEnergy" nameOfLabel="Unused Energy (%)" validRule={validUnusedEnergy} nameOfState={unusedEnergy} />
                         <Input id="unusedEnergy" value={unusedEnergy} autoComplete="off"
                             onChange={(e) => setUnusedEnergy(e.target.value)}
                             aria_invalid={validUnusedEnergy ? "false" : "true"}
@@ -872,7 +871,7 @@ const CreateInverterModule = () => {
                             onBlur={() => setUnusedEnergyFocus(false)}
                             focusValue={unusedEnergyFocus}
                             validValue={validUnusedEnergy}
-                            errorMesg="Only numbers allowed with decimal or not."
+                            errorMesg="Value should be between 0 to 100."
                         />
                     </div>
                 </div>

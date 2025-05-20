@@ -12,14 +12,16 @@ const ONLY_CHAR_REGEX = /^[^ ][A-Za-z ]+$/;
 
 const ONLY_NUMBER = /^[0-9]{1,4}$/;
 const NUMBER_DECIMAL = /^([0-9]{1,6})(\.[0-9]{1,6})$/;
-const ALPHA_NUMERIC = /^[a-zA-Z0-9.-]{3,23}$/;
+const ALPHA_NUMERIC = /^[ a-zA-Z0-9.-]{3,23}$/;
 const ONLY_INTEGER = /^[0-9]{1,7}$/;
 const DOUBLE_TYPE = /^[0-9]\d*(\.\d{1,5})?$/;
 const NOT_SPECIAL_CHAR = /^[a-zA-Z0-9 .-]{3,50}$/;
 const DIRECTION = /^[a-zA-Z0-9 '^0.-]{3,35}$/;
 const VALID_YEAR = /^[0-9]{4}$/;
 
-const dataTest = [
+const ONE_TO_100 = /^(100(\.0+)?|(\d{1,2}))$/;
+
+const IRRADIATION_DATAS = [
    {
       "year": 2024,
       "month": "January",
@@ -93,11 +95,19 @@ const dataTest = [
       "glob_inc": 148.1,
    }
 ];
+const GLOBAL_IRRADATION_DATA = {
+   "year": 2024,
+   "globalIncident": 108.82,
+   "irradianceLoss": 98.39,
+   "iam_factor": 99.75,
+   "soilingLoss": 97.66,
+   "groundReflection": 100.00
+}
 
 export {
    USER_REGEX, PWD_REGEX,
    EMAIL_REGEX, CASE_NUMBER_REGEX, CHAR_REGEX,
    SEC_REGEX, DATE_REGEX, CHAR_REGEX_COURT_NAME, CHAR_REGEX_CASE_CAT, ONLY_CHAR_REGEX, ONLY_NUMBER,
    NUMBER_DECIMAL, ALPHA_NUMERIC, ONLY_INTEGER, DOUBLE_TYPE, NOT_SPECIAL_CHAR, DIRECTION, VALID_YEAR,
-   dataTest
+   IRRADIATION_DATAS, ONE_TO_100, GLOBAL_IRRADATION_DATA
 };

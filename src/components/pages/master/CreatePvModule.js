@@ -2,8 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { faInfoCircle, faFileExport } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-    USER_REGEX, ONLY_NUMBER, NUMBER_DECIMAL, ALPHA_NUMERIC
-    , ONLY_INTEGER
+    ONLY_NUMBER, NUMBER_DECIMAL, ALPHA_NUMERIC, ONLY_INTEGER, ONE_TO_100
 } from '../../Common/ValidationConstants';
 import Axios from "../../../api/Axios";
 import AlertModal from "../../Common/Modal/AlertModal";
@@ -123,7 +122,7 @@ const CreatePvModule = () => {
         userRef.current.focus();
     }, []);
     useEffect(() => {
-        const result = USER_REGEX.test(manufacturerName);
+        const result = ALPHA_NUMERIC.test(manufacturerName);
         setValidManufacturerName(result);
     }, [manufacturerName]);
     useEffect(() => {
@@ -131,11 +130,11 @@ const CreatePvModule = () => {
         setValidModelName(result);
     }, [modelName]);
     useEffect(() => {
-        const result = USER_REGEX.test(type);
+        const result = ALPHA_NUMERIC.test(type);
         setValidType(result);
     }, [type]);
     useEffect(() => {
-        const result = NUMBER_DECIMAL.test(lightInDeg);
+        const result = ONE_TO_100.test(lightInDeg);
         setValidLightInDeg(result);
     }, [lightInDeg]);
     useEffect(() => {
@@ -151,11 +150,11 @@ const CreatePvModule = () => {
         setValidCurrentShort(result);
     }, [currentShort]);
     useEffect(() => {
-        const result = ONLY_INTEGER.test(backIrr);
+        const result = ONE_TO_100.test(backIrr);
         setValidBackIrr(result);
     }, [backIrr]);
     useEffect(() => {
-        const result = NUMBER_DECIMAL.test(mismatchLoss);
+        const result = ONE_TO_100.test(mismatchLoss);
         setValidMismatchLoss(result);
     }, [mismatchLoss]);
     useEffect(() => {
@@ -167,15 +166,15 @@ const CreatePvModule = () => {
         setValidMaxPowerCurrent(result);
     }, [maxPowerCurrent]);
     useEffect(() => {
-        const result = ALPHA_NUMERIC.test(tempPmax);
+        const result = ONE_TO_100.test(tempPmax);
         setValidTempPmax(result);
     }, [tempPmax]);
     useEffect(() => {
-        const result = ALPHA_NUMERIC.test(tempVoc);
+        const result = ONE_TO_100.test(tempVoc);
         setValidTempVoc(result);
     }, [tempVoc]);
     useEffect(() => {
-        const result = ALPHA_NUMERIC.test(tempIsc);
+        const result = ONE_TO_100.test(tempIsc);
         setValidTempIsc(result);
     }, [tempIsc]);
     useEffect(() => {
@@ -183,11 +182,11 @@ const CreatePvModule = () => {
         setValidModuleLength(result);
     }, [moduleLength]);
     useEffect(() => {
-        const result = ONLY_INTEGER.test(moduleDeLoss);
+        const result = ONE_TO_100.test(moduleDeLoss);
         setValidModuleDeLoss(result);
     }, [moduleDeLoss]);
     useEffect(() => {
-        const result = NUMBER_DECIMAL.test(moduleQualityLoss);
+        const result = ONE_TO_100.test(moduleQualityLoss);
         setValidModuleQualityLoss(result);
     }, [moduleQualityLoss]);
     useEffect(() => {
@@ -211,15 +210,15 @@ const CreatePvModule = () => {
         setValidModuleStrings(result);
     }, [moduleStrings]);
     useEffect(() => {
-        const result = NUMBER_DECIMAL.test(ohmicWiLoss);
+        const result = ONE_TO_100.test(ohmicWiLoss);
         setValidOhmicWiLoss(result);
     }, [ohmicWiLoss]);
     useEffect(() => {
-        const result = NUMBER_DECIMAL.test(pvLossIrr);
+        const result = ONE_TO_100.test(pvLossIrr);
         setValidPvLossIrr(result);
     }, [pvLossIrr]);
     useEffect(() => {
-        const result = NUMBER_DECIMAL.test(pvLossTemp);
+        const result = ONE_TO_100.test(pvLossTemp);
         setValidPvLossTemp(result);
     }, [pvLossTemp]);
 
@@ -242,23 +241,23 @@ const CreatePvModule = () => {
                 current_short_circuit_isc: currentShort,
                 max_power_voltage_vmpp: maxPowerVoltage,
                 max_power_current_impp: maxPowerCurrent,
-                temp_coecient_of_pmax: tempPmax,
-                temp_coecient_of_voc: tempVoc,
-                temp_coecient_of_isc: tempIsc,
+                temp_coecient_of_pmax: tempPmax / 100,
+                temp_coecient_of_voc: tempVoc / 100,
+                temp_coecient_of_isc: tempIsc / 100,
                 module_length: moduleLength,
                 module_breadth: moduleBreadth,
                 module_thickness: moduleThickness,
                 unitNomPower: unitNomPower,
-                lightInducedDegradation: lightInDeg,
-                mismatchForBackIrradiance: backIrr,
-                mismatchLoss: mismatchLoss,
-                moduleDegradationLoss: moduleDeLoss,
-                moduleQualityLoss: moduleQualityLoss,
+                lightInducedDegradation: lightInDeg / 100,
+                mismatchForBackIrradiance: backIrr / 100,
+                mismatchLoss: mismatchLoss / 100,
+                moduleDegradationLoss: moduleDeLoss / 100,
+                moduleQualityLoss: moduleQualityLoss / 100,
                 modules_in_series: moduleSeries,
                 modules_in_strings: moduleStrings,
-                ohmicWiringLoss: ohmicWiLoss,
-                pvLossDueToIrradiance: pvLossIrr,
-                pvLossDueToTemperature: pvLossTemp
+                ohmicWiringLoss: ohmicWiLoss / 100,
+                pvLossDueToIrradiance: pvLossIrr / 100,
+                pvLossDueToTemperature: pvLossTemp / 100
             }
             try {
                 const response = await Axios.post(CREATE_PV_MODULE, data);
@@ -297,9 +296,7 @@ const CreatePvModule = () => {
                         <p id="manufacturerNamenote" className={manufacturerNameFocus && manufacturerName && !validManufacturerName
                             ? "text-red-400" : "hidden"}>
                             <FontAwesomeIcon icon={faInfoCircle} />
-                            4 to 24 characters.
-                            Must begin with a letter.
-                            Letters, numbers, underscores, hyphens allowed.
+                            Minimum 3 to maximum 23 Alpha numeric characters are allowed.
                         </p>
                     </div>
                     <div className="w-full md:w-1/4 px-3">
@@ -312,7 +309,7 @@ const CreatePvModule = () => {
                             onBlur={() => setModelNameFocus(false)}
                             focusValue={modelNameFocus}
                             validValue={validModelName}
-                            errorMesg="4 to 24 characters. Must begin with a letter. Letters, numbers, underscores, hyphens allowed."
+                            errorMesg=" Minimum 3 to maximum 23 Alpha numeric characters are allowed."
                         />
                     </div>
                     <div className="w-full md:w-1/4 px-3">
@@ -325,11 +322,11 @@ const CreatePvModule = () => {
                             onBlur={() => setTypeFocus(false)}
                             focusValue={typeFocus}
                             validValue={validType}
-                            errorMesg="4 to 24 characters. Must begin with a letter. Letters, numbers, underscores, hyphens allowed."
+                            errorMesg=" Minimum 3 to maximum 23 Alpha numeric characters are allowed."
                         />
                     </div>
                     <div className="w-full md:w-1/4 px-3">
-                        <Label htmlFor="lightInducedDegradation" nameOfLabel="Light Induced Degradation" validRule={validLightInDeg} nameOfState={lightInDeg} />
+                        <Label htmlFor="lightInducedDegradation" nameOfLabel="Light Induced Degradation(%)" validRule={validLightInDeg} nameOfState={lightInDeg} />
                         <Input id="lightInducedDegradation" value={lightInDeg} autoComplete="off"
                             onChange={(e) => setLightInDeg(e.target.value)}
                             aria_invalid={validLightInDeg ? "false" : "true"}
@@ -338,7 +335,7 @@ const CreatePvModule = () => {
                             onBlur={() => setLightInDegFocus(false)}
                             focusValue={lightInDegFocus}
                             validValue={validLightInDeg}
-                            errorMesg="Only positive integer number allowed."
+                            errorMesg="Value should be between 0 to 100."
                         />
                     </div>
                 </div>
@@ -383,7 +380,7 @@ const CreatePvModule = () => {
                         />
                     </div>
                     <div className="w-full md:w-1/4 px-3">
-                        <Label htmlFor="pv_loss_temp" nameOfLabel="PV Loss due to temperature" validRule={validPvLossTemp} nameOfState={pvLossTemp} />
+                        <Label htmlFor="pv_loss_temp" nameOfLabel="PV Loss due to temperature (%)" validRule={validPvLossTemp} nameOfState={pvLossTemp} />
                         <Input id="pv_loss_temp" value={pvLossTemp} autoComplete="off"
                             onChange={(e) => setPvLossTemp(e.target.value)}
                             aria_invalid={validPvLossTemp ? "false" : "true"}
@@ -392,13 +389,13 @@ const CreatePvModule = () => {
                             onBlur={() => setPvLossTempFocus(false)}
                             focusValue={pvLossTempFocus}
                             validValue={validPvLossTemp}
-                            errorMesg="Only positive integer number allowed."
+                            errorMesg="Value should be between 0 to 100."
                         />
                     </div>
                 </div>
                 <div className="flex flex-wrap -mx-3 mb-4">
                     <div className="w-full md:w-1/4 px-3">
-                        <Label htmlFor="mismatch_loss" nameOfLabel="Mismatch Loss" validRule={validMismatchLoss} nameOfState={mismatchLoss} />
+                        <Label htmlFor="mismatch_loss" nameOfLabel="Mismatch Loss (%)" validRule={validMismatchLoss} nameOfState={mismatchLoss} />
                         <Input id="mismatch_loss" value={mismatchLoss} autoComplete="off"
                             onChange={(e) => setMismatchLoss(e.target.value)}
                             aria_invalid={validMismatchLoss ? "false" : "true"}
@@ -407,7 +404,7 @@ const CreatePvModule = () => {
                             onBlur={() => setMismatchLossFocus(false)}
                             focusValue={mismatchLossFocus}
                             validValue={validMismatchLoss}
-                            errorMesg="Only positive integer number allowed."
+                            errorMesg="Value should be between 0 to 100."
                         />
                     </div>
                     <div className="w-full md:w-1/4 px-3">
@@ -437,7 +434,7 @@ const CreatePvModule = () => {
                         />
                     </div>
                     <div className="w-full md:w-1/4 px-3">
-                        <Label htmlFor="temp_coecient_of_pmax" nameOfLabel="Temp Coecient of PMAX" validRule={validTempPmax} nameOfState={tempPmax} />
+                        <Label htmlFor="temp_coecient_of_pmax" nameOfLabel="Temp Coecient of PMAX (%)" validRule={validTempPmax} nameOfState={tempPmax} />
                         <Input id="temp_coecient_of_pmax" value={tempPmax} autoComplete="off"
                             onChange={(e) => setTempPmax(e.target.value)}
                             aria_invalid={validTempPmax ? "false" : "true"}
@@ -446,13 +443,13 @@ const CreatePvModule = () => {
                             onBlur={() => setTempPmaxFocus(false)}
                             focusValue={tempPmaxFocus}
                             validValue={validTempPmax}
-                            errorMesg="Only decimal number allowed upto two decimal."
+                            errorMesg="Value should be between 0 to 100."
                         />
                     </div>
                 </div>
                 <div className="flex flex-wrap -mx-3 mb-4">
                     <div className="w-full md:w-1/4 px-3">
-                        <Label htmlFor="temp_coecient_of_voc" nameOfLabel=" Temp Coecient of VOC" validRule={validTempVoc} nameOfState={tempVoc} />
+                        <Label htmlFor="temp_coecient_of_voc" nameOfLabel=" Temp Coecient of VOC (%)" validRule={validTempVoc} nameOfState={tempVoc} />
                         <Input id="temp_coecient_of_voc" value={tempVoc} autoComplete="off"
                             onChange={(e) => setTempVoc(e.target.value)}
                             aria_invalid={validTempVoc ? "false" : "true"}
@@ -461,11 +458,11 @@ const CreatePvModule = () => {
                             onBlur={() => setTempVocFocus(false)}
                             focusValue={tempVocFocus}
                             validValue={validTempVoc}
-                            errorMesg="Only decimal number allowed upto two decimal."
+                            errorMesg="Value should be between 0 to 100."
                         />
                     </div>
                     <div className="w-full md:w-1/4 px-3">
-                        <Label htmlFor="temp_coecient_of_isc" nameOfLabel="Temp Coecient of ISC" validRule={validTempIsc} nameOfState={tempIsc} />
+                        <Label htmlFor="temp_coecient_of_isc" nameOfLabel="Temp Coecient of ISC (%)" validRule={validTempIsc} nameOfState={tempIsc} />
                         <Input id="temp_coecient_of_isc" value={tempIsc} autoComplete="off"
                             onChange={(e) => setTempIsc(e.target.value)}
                             aria_invalid={validTempIsc ? "false" : "true"}
@@ -474,7 +471,7 @@ const CreatePvModule = () => {
                             onBlur={() => setTempIscFocus(false)}
                             focusValue={tempIscFocus}
                             validValue={validTempIsc}
-                            errorMesg="Only decimal number allowed upto two decimal."
+                            errorMesg="Value should be between 0 to 100."
                         />
                     </div>
                     <div className="w-full md:w-1/4 px-3">
@@ -491,7 +488,7 @@ const CreatePvModule = () => {
                         />
                     </div>
                     <div className="w-full md:w-1/4 px-3">
-                        <Label htmlFor="module_degradation_loss" nameOfLabel="Module Degradation Loss" validRule={validModuleDeLoss} nameOfState={moduleDeLoss} />
+                        <Label htmlFor="module_degradation_loss" nameOfLabel="Module Degradation Loss (%)" validRule={validModuleDeLoss} nameOfState={moduleDeLoss} />
                         <Input id="module_degradation_loss" value={moduleDeLoss} autoComplete="off"
                             onChange={(e) => setModuleDeLoss(e.target.value)}
                             aria_invalid={validModuleDeLoss ? "false" : "true"}
@@ -500,13 +497,13 @@ const CreatePvModule = () => {
                             onBlur={() => setModuleDeLossFocus(false)}
                             focusValue={moduleDeLossFocus}
                             validValue={validModuleDeLoss}
-                            errorMesg="Only integer number allowed."
+                            errorMesg="Value should be between 0 to 100."
                         />
                     </div>
                 </div>
                 <div className="flex flex-wrap -mx-3 mb-4">
                     <div className="w-full md:w-1/4 px-3">
-                        <Label htmlFor="module_quality_loss" nameOfLabel="Module Quality Loss" validRule={validModuleQualityLoss} nameOfState={moduleQualityLoss} />
+                        <Label htmlFor="module_quality_loss" nameOfLabel="Module Quality Loss (%)" validRule={validModuleQualityLoss} nameOfState={moduleQualityLoss} />
                         <Input id="module_quality_loss" value={moduleQualityLoss} autoComplete="off"
                             onChange={(e) => setModuleQualityLoss(e.target.value)}
                             aria_invalid={validModuleQualityLoss ? "false" : "true"}
@@ -515,7 +512,7 @@ const CreatePvModule = () => {
                             onBlur={() => setModuleQualityLossFocus(false)}
                             focusValue={moduleQualityLossFocus}
                             validValue={validModuleQualityLoss}
-                            errorMesg="Only integer number allowed."
+                            errorMesg="Value should be between 0 to 100."
                         />
                     </div>
                     <div className="w-full md:w-1/4 px-3">
@@ -586,7 +583,7 @@ const CreatePvModule = () => {
                         />
                     </div>
                     <div className="w-full md:w-1/4 px-3">
-                        <Label htmlFor="ohmic_wi_loss" nameOfLabel="Ohmic Wiring Loss" validRule={validOhmicWiLoss} nameOfState={ohmicWiLoss} />
+                        <Label htmlFor="ohmic_wi_loss" nameOfLabel="Ohmic Wiring Loss (%)" validRule={validOhmicWiLoss} nameOfState={ohmicWiLoss} />
                         <Input id="ohmic_wi_loss" value={ohmicWiLoss} autoComplete="off"
                             onChange={(e) => setOhmicWiLoss(e.target.value)}
                             aria_invalid={validOhmicWiLoss ? "false" : "true"}
@@ -595,11 +592,11 @@ const CreatePvModule = () => {
                             onBlur={() => setOhmicWiLossFocus(false)}
                             focusValue={ohmicWiLossFocus}
                             validValue={validOhmicWiLoss}
-                            errorMesg="Only positive integer number allowed."
+                            errorMesg="Value should be between 0 to 100."
                         />
                     </div>
                     <div className="w-full md:w-1/4 px-3">
-                        <Label htmlFor="pv_loss_irr" nameOfLabel="PV Loss due to Irradiance" validRule={validPvLossIrr} nameOfState={pvLossIrr} />
+                        <Label htmlFor="pv_loss_irr" nameOfLabel="PV Loss due to Irradiance (%)" validRule={validPvLossIrr} nameOfState={pvLossIrr} />
                         <Input id="pv_loss_irr" value={pvLossIrr} autoComplete="off"
                             onChange={(e) => setPvLossIrr(e.target.value)}
                             aria_invalid={validPvLossIrr ? "false" : "true"}
@@ -608,13 +605,13 @@ const CreatePvModule = () => {
                             onBlur={() => setPvLossIrrFocus(false)}
                             focusValue={pvLossIrrFocus}
                             validValue={validPvLossIrr}
-                            errorMesg="Only positive integer number allowed."
+                            errorMesg="Value should be between 0 to 100."
                         />
                     </div>
                 </div>
                 <div className="flex flex-wrap -mx-3 mb-4">
                     <div className="w-full md:w-1/4 px-3">
-                        <Label htmlFor="back_irradiance" nameOfLabel="Mismatch for Back Irradiance" validRule={validBackIrr} nameOfState={backIrr} />
+                        <Label htmlFor="back_irradiance" nameOfLabel="Mismatch for Back Irradiance (%)" validRule={validBackIrr} nameOfState={backIrr} />
                         <Input id="back_irradiance" value={backIrr} autoComplete="off"
                             onChange={(e) => setBackIrr(e.target.value)}
                             aria_invalid={validBackIrr ? "false" : "true"}
@@ -623,7 +620,7 @@ const CreatePvModule = () => {
                             onBlur={() => setBackIrrFocus(false)}
                             focusValue={backIrrFocus}
                             validValue={validBackIrr}
-                            errorMesg="Only positive integer number allowed."
+                            errorMesg="Value should be between 0 to 100."
                         />
                     </div>
                 </div>
