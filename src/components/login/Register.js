@@ -72,9 +72,6 @@ const Register = () => {
             name: fullName,
             email: email,
             password: pwd,
-            //role: "ADMIN"
-            role: "MASTER"
-            //role: "USER"
         })
             .then(function (response) {
                 console.log(response);

@@ -4,6 +4,7 @@ import Axios from "../../../api/Axios";
 import UpdateProjectModal from "../../Common/Modal/UpdateProjectModal";
 import MyGraph from "./MyGraph";
 import AlertModal from "../../Common/Modal/AlertModal";
+import { IRRADIATION_DATAS, GLOBAL_IRRADATION_DATA } from '../../Common/ValidationConstants';
 const MY_PROJECT = 'v1/projects/byuser/';
 const CREATE_IRRIDATION = 'irr/create/';
 const CREATE_GLOBAL_IRRADIATION = 'globirr/create/';
@@ -43,106 +44,27 @@ const MyDashboard = () => {
     };
 
     const calculateIrridationData = async (project_id) => {
-        const data = [
-            {
-                "year": 2024,
-                "month": "January",
-                "glob_hor": 110.4,
-                "glob_inc": 141.2,
-            },
-            {
-                "year": 2024,
-                "month": "February",
-                "glob_hor": 112,
-                "glob_inc": 132.2,
-            },
-            {
-                "year": 2024,
-                "month": "March",
-                "glob_hor": 149.9,
-                "glob_inc": 162.6,
-            },
-            {
-                "year": 2024,
-                "month": "April",
-                "glob_hor": 142.1,
-                "glob_inc": 144.4,
-            },
-            {
-                "year": 2024,
-                "month": "May",
-                "glob_hor": 142.7,
-                "glob_inc": 137.5,
-            },
-            {
-                "year": 2024,
-                "month": "June",
-                "glob_hor": 136.3,
-                "glob_inc": 128.4,
-            },
-            {
-                "year": 2024,
-                "month": "July",
-                "glob_hor": 129.4,
-                "glob_inc": 122.8,
-            },
-            {
-                "year": 2024,
-                "month": "August",
-                "glob_hor": 142.4,
-                "glob_inc": 140.4,
-            },
-            {
-                "year": 2024,
-                "month": "September",
-                "glob_hor": 129.8,
-                "glob_inc": 136.3,
-            },
-            {
-                "year": 2024,
-                "month": "October",
-                "glob_hor": 124.8,
-                "glob_inc": 140.7,
-            },
-            {
-                "year": 2024,
-                "month": "November",
-                "glob_hor": 123.1,
-                "glob_inc": 156.6,
-            },
-            {
-                "year": 2024,
-                "month": "December",
-                "glob_hor": 111.2,
-                "glob_inc": 148.1,
-            }
-        ]
         try {
-            const response = await Axios.post(CREATE_IRRIDATION.concat(project_id), data);
-            console.log(JSON.stringify(response?.data));
+            const response = await Axios.post(CREATE_IRRIDATION.concat(project_id), IRRADIATION_DATAS);
+            //console.log(JSON.stringify(response?.data));
+            //console.log(response.data);
             //alert(JSON.stringify(response.data.message));
             setSuccessAlert(true);
             setIrrMesg(response?.data.message);
+            // setIrridationDataStatus(response.data.succcess);
             //setSuccessAlert
         } catch (err) {
             console.log(err);
         }
     };
     const calculateGlobalIrridationData = async (project_id) => {
-        const data = {
-            "year": 2024,
-            "globalIncident": 108.82,
-            "irradianceLoss": 98.39,
-            "iam_factor": 99.75,
-            "soilingLoss": 97.66,
-            "groundReflection": 100.00
-        }
         try {
-            const response = await Axios.post(CREATE_GLOBAL_IRRADIATION.concat(project_id), data);
+            const response = await Axios.post(CREATE_GLOBAL_IRRADIATION.concat(project_id), GLOBAL_IRRADATION_DATA);
             console.log(response.data);
             //alert(JSON.stringify(response.data.message));
             setSuccessAlert(true);
             setIrrMesg(response?.data.message);
+            // setGlobalIrradationDataStatus(response.data.succcess);
             //setSuccessAlert
         } catch (err) {
             console.log(err);
@@ -161,6 +83,7 @@ const MyDashboard = () => {
             console.log(err);
         }
     };
+
     return (
         <>
             {!showGraph &&
@@ -226,13 +149,11 @@ const MyDashboard = () => {
                                                 </div>
                                             </div>
                                         </div>
-                                        <div className="flex pl-4">
-                                            <button className="border text-sm border-gray-200 px-1 py-2 hover:bg-slate-400 duration-100" onClick={() => calculateIrridationData(data.projectId)}>Load Irradiation Data</button>
-                                            <button className="border text-sm border-gray-200 px-1 py-2 hover:bg-slate-400 duration-100" onClick={() => calculateGlobalIrridationData(data.projectId)}>Load Global Irradiation Data</button>
-                                        </div>
-                                        <div className="flex  bg-gray-50 pl-4">
-                                            <button className="border text-sm border-gray-200 px-1 py-2 hover:bg-slate-400 duration-100" onClick={() => calculateGraph(data.projectId)}>Create Graph</button>
-                                            <button className="border text-sm border-gray-200 px-1 py-2 hover:bg-slate-400 duration-100" onClick={() => generateGraph(data.projectId)}>Show Graph</button>
+                                        <div className="flex  bg-gray-50 p-4">
+                                            <button className="border text-sm bg-gray-200 border-gray-200 px-1 py-2 hover:bg-green-400 duration-100" onClick={() => calculateIrridationData(data.projectId)}>Load Irradiation Data</button>
+                                            <button className="border text-sm bg-gray-200 border-l-gray-300 px-1 py-2 hover:bg-green-400 duration-100" onClick={() => calculateGlobalIrridationData(data.projectId)}>Load Global Irradiation Data</button>
+                                            <button className="border text-sm bg-gray-200 border-l-gray-300 px-1 py-2 hover:bg-green-400 duration-100" onClick={() => calculateGraph(data.projectId)}>Create Graph</button>
+                                            <button className="border text-sm bg-gray-200 border-l-gray-300 px-1 py-2 hover:bg-green-400 duration-100" onClick={() => generateGraph(data.projectId)}>Show Graph</button>
                                         </div>
                                     </div>
                                 ))}

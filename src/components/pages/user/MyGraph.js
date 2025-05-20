@@ -4,7 +4,7 @@ import { Bar } from "react-chartjs-2";
 import { jsPDF } from 'jspdf';
 import html2canvas from "html2canvas";
 import Axios from "../../../api/Axios";
-import { dataTest } from "../../Common/ValidationConstants";
+import { IRRADIATION_DATAS } from "../../Common/ValidationConstants";
 ChartJS.register(...registerables);
 
 const RESULT = '/results/project/';
@@ -629,8 +629,8 @@ const MyGraph = ({ id, onClose }) => {
                             <td>Global Horizontal Irradiation</td>
                             <td>Global Incident</td>
                         </tr>
-                        {dataTest.map((data) => (
-                            <tr>
+                        {IRRADIATION_DATAS.map((data, index) => (
+                            <tr key={index}>
                                 <td>{data['glob_hor']}</td>
                                 <td>{data['glob_inc']}</td>
                             </tr>
