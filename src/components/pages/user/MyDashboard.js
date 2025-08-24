@@ -9,6 +9,7 @@ const MY_PROJECT = 'v1/projects/byuser/';
 const CREATE_IRRIDATION = 'irr/create/';
 const CREATE_GLOBAL_IRRADIATION = 'globirr/create/';
 const CAL_GRAPH = '/results/create/';
+//const IS_SUBS = '/subscription/find/';
 
 const MyDashboard = () => {
     const { auth } = UseAuth();
@@ -20,6 +21,22 @@ const MyDashboard = () => {
     const [errorAlert, setErrorAlert] = useState(false);
     const [successAlert, setSuccessAlert] = useState(false);
     const [irrMesg, setIrrMesg] = useState('');
+    //const [isSubscribed, setIsSubscribed] = useState('');
+
+    // useEffect(() => {
+    //     const isSubscribed = async () => {
+    //         try {
+    //             await Axios.get(IS_SUBS.concat(auth.userId))
+    //                 .then(function (response) {
+    //                     console.log(response.data.length);
+    //                     //setIsSubscribed(response.data.length);
+    //                 })
+    //         } catch (err) {
+    //             console.log(err);
+    //         }
+    //     };
+    //     isSubscribed();
+    // }, [auth.userId]);
 
     useEffect(() => {
         if (updating || auth.userId) {
@@ -60,7 +77,7 @@ const MyDashboard = () => {
     const calculateGlobalIrridationData = async (project_id) => {
         try {
             const response = await Axios.post(CREATE_GLOBAL_IRRADIATION.concat(project_id), GLOBAL_IRRADATION_DATA);
-            console.log(response.data);
+            //console.log(response.data);
             //alert(JSON.stringify(response.data.message));
             setSuccessAlert(true);
             setIrrMesg(response?.data.message);
@@ -89,8 +106,8 @@ const MyDashboard = () => {
             {!showGraph &&
                 <div>
                     {projectData.length === 0 ?
-                        <div className='dark:text-slate-700 text-slate-700 text-2xl'>
-                            No project has created.
+                        <div className='dark:text-slate-700 text-sm text-red-500 text-center'>
+                            No project has created yet.
                         </div> :
                         <div className='grid'>
                             <div className="grid grid-cols-2 gap-6">

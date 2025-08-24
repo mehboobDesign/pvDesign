@@ -3,13 +3,13 @@ import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 
-const SelectComponent = (props) => { 
-    
+const SelectComponent = (props) => {
+
     return (
         <>
-            <select 
-             className="bg-slate-100 w-full dark:bg-slate-200 p-2 rounded-lg text-slate-800 focus:outline-none"
-                id={props.id} 
+            <select
+                className="bg-gray-100 w-full dark:bg-gray-100 p-2 text-sm text-stone-800 focus:outline-none"
+                id={props.id}
                 ref={props.ref}
                 values={props.values}
                 defaultValue={props.defaultValue}
@@ -19,16 +19,16 @@ const SelectComponent = (props) => {
                 aria-describedby={props.ariaDescribedby}
                 onFocus={props.onFocus}
                 onBlur={props.onBlur}
-                >
+            >
                 <option>{props.defaultValue}</option>
-                {props.values.map((value,index)=>{ 
-                    return <option key={index} value={value.designId}>{value.designId} {value.designName}</option>
-                })}   
+                {props.values.map((value, index) => {
+                    return <option key={index} value={value}> {value}</option>
+                })}
             </select>
             <p id={props.ariaDescribedby} className={`${props.focusValue && !props.validValue
-                    ? "text-red-400" : "hidden"}`}>
-                    <FontAwesomeIcon icon={faInfoCircle} />&nbsp;
-                    {props.errorMesg}
+                ? "text-red-400" : "hidden"}`}>
+                <FontAwesomeIcon icon={faInfoCircle} />&nbsp;
+                {props.errorMesg}
             </p>
         </>
     );
