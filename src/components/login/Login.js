@@ -4,6 +4,7 @@ import Axios from "../../api/Axios";
 import useAuth from '../Hooks/UseAuth';
 // import ClipLoader from "react-spinners/ClipLoader";
 import { CircleLoader } from "react-spinners";
+import AlertModal from "../Common/Modal/AlertModal";
 
 const LOGIN_URL = 'users/login';
 
@@ -16,11 +17,12 @@ const Login = () => {
     const from = location.state?.form?.pathname || '/';
 
     const userRef = useRef();
-    const errorRef = useRef();
+    //const errorRef = useRef();
 
     const [email, setEmail] = useState('');
     const [pwd, setPwd] = useState('');
     const [errMsg, setErrMsg] = useState('');
+    const [errorAlert, setErrorAlert] = useState(false);
 
     const [isLoading, setIsLoading] = useState(false);
 
@@ -76,9 +78,15 @@ const Login = () => {
             //errorRef.current.focus();
             if (err?.status === 401) {
                 setErrMsg("Unauthorize access, please check your email and password");
+                setErrorAlert(true);
                 setIsLoading(false);
             } else if (err?.status === 500) {
                 setErrMsg("Server Error");
+                setErrorAlert(true);
+                setIsLoading(false);
+            } else if (err?.status === undefined) {
+                setErrMsg("Database connection refused. Please check your internet connectivity.");
+                setErrorAlert(true);
                 setIsLoading(false);
             }
             //errorRef.current.focus();
@@ -93,7 +101,7 @@ const Login = () => {
             {isLoading ? <div className="flex items-center justify-center"><CircleLoader color={'#D0021B'} loading={isLoading} size={100} /></div> :
                 // <div className="flex h-screen items-center justify-center">
                 <form className="" onSubmit={handleSubmit}>
-                    <p className={errMsg ? "text-orange-500" : "hidden"} ref={errorRef} aria-live="assertive">{errMsg}</p>
+                    {/* <p className={errMsg ? "text-orange-500" : "hidden"} ref={errorRef} aria-live="assertive">{errMsg}</p> */}
                     <h1 className="text-4xl font-black text-stone-700">Login</h1>
                     <div className="grid pt-2">
                         <label htmlFor="email" className="mb-2">
@@ -129,6 +137,20 @@ const Login = () => {
                 </form>
                 // </div>
             }
+
+            <AlertModal modalOpen={errorAlert} onClose={() => setErrorAlert(false)}>
+                <div className='text-center w-96'>
+                    <h3 className={`text-lg font-black text-red-600 p-4}`}>
+                        Opps.....!
+                    </h3>
+                    <p className='text-sm text-gray-500 pb-4 pl-4 pr-4'>
+                        {errMsg}
+                    </p>
+                    <div className='flex gap-4 justify-center items-center'>
+                        {errorAlert && <button className="border border-red-500 bg-red-500 text-white hover:bg-red-600 w-1/2 pt-1 pl-2 pr-2 pb-1" onClick={() => setErrorAlert(false)}>OK</button>}
+                    </div>
+                </div>
+            </AlertModal>
 
         </>
     );
