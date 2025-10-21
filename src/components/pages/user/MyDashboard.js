@@ -4,11 +4,14 @@ import Axios from "../../../api/Axios";
 import UpdateProjectModal from "../../Common/Modal/UpdateProjectModal";
 import MyGraph from "./MyGraph";
 import AlertModal from "../../Common/Modal/AlertModal";
-import { IRRADIATION_DATAS, GLOBAL_IRRADATION_DATA } from '../../Common/ValidationConstants';
+//import { IRRADIATION_DATAS, GLOBAL_IRRADATION_DATA } from '../../Common/ValidationConstants';
 const MY_PROJECT = 'v1/projects/byuser/';
-const CREATE_IRRIDATION = 'irr/create/';
-const CREATE_GLOBAL_IRRADIATION = 'globirr/create/';
-const CAL_GRAPH = '/results/create/';
+//const CREATE_IRRIDATION = 'irr/create/';
+
+const CREATE_LOAD_WH_DATA = 'owirr/create';
+const CALCULATE_GTI = 'gti/create';
+//const CREATE_GLOBAL_IRRADIATION = 'globirr/create/';
+const CAL_GRAPH = '/finalresults/create/';
 //const IS_SUBS = '/subscription/find/';
 
 const MyDashboard = () => {
@@ -60,11 +63,13 @@ const MyDashboard = () => {
         setModalOpen(true);
     };
 
-    const calculateIrridationData = async (project_id) => {
+    const calculateIrridationData = async (project_id, project_latitude, project_longitude, project_year) => {
         try {
-            const response = await Axios.post(CREATE_IRRIDATION.concat(project_id), IRRADIATION_DATAS);
+            // const response = await Axios.post(CREATE_IRRIDATION.concat(project_id), IRRADIATION_DATAS);
+            // /create/lat/{lat}/lon/{lon}/tz/{tz}/year/{year}/project/{projectId}
+            const response = await Axios.post(CREATE_LOAD_WH_DATA.concat('/lat/').concat(project_latitude).concat('/lon/').concat(project_longitude).concat('/tz/').concat('+05:30').concat('/year/').concat('2024').concat('/project/').concat(project_id));
             //console.log(JSON.stringify(response?.data));
-            //console.log(response.data);
+            console.log(response.data);
             //alert(JSON.stringify(response.data.message));
             setSuccessAlert(true);
             setIrrMesg(response?.data.message);
@@ -74,9 +79,19 @@ const MyDashboard = () => {
             console.log(err);
         }
     };
-    const calculateGlobalIrridationData = async (project_id) => {
+    const calculateGTI = async (project_id, project_latitude, project_longitude, albido, tiltDeg, panelAzimuthDeg, iAmFactor, soilingLossFrac, shadingLossFrac, systemLossFrac, otherOpticalLossFrac) => {
+        const data = {
+            albido: albido,
+            tiltDeg: tiltDeg,
+            panelAzimuthDeg: panelAzimuthDeg,
+            iamB0: iAmFactor,
+            soilingLossFrac: soilingLossFrac,
+            shadingLossFrac: shadingLossFrac,
+            otherOpticalLossFrac: otherOpticalLossFrac,
+            systemLossFrac: systemLossFrac
+        }
         try {
-            const response = await Axios.post(CREATE_GLOBAL_IRRADIATION.concat(project_id), GLOBAL_IRRADATION_DATA);
+            const response = await Axios.post(CALCULATE_GTI.concat('/lat/').concat(project_latitude).concat('/lon/').concat(project_longitude).concat('/id/').concat(project_id), data);
             //console.log(response.data);
             //alert(JSON.stringify(response.data.message));
             setSuccessAlert(true);
@@ -91,7 +106,7 @@ const MyDashboard = () => {
         setProjectId(p_id);
         setShowGraph(true);
     };
-    const calculateGraph = async (project_id) => {
+    const startSimulation = async (project_id) => {
         try {
             const response = await Axios.post(CAL_GRAPH.concat(project_id));
             console.log(response.data);
@@ -147,10 +162,10 @@ const MyDashboard = () => {
                                                     <div className="">PvModule Name: <span className="underline">{data.designConfig.pvModule.manufacturer}</span></div>
                                                     <div className="">Inverter Name: <span className="underline">{data.designConfig.inverter.manufacturer}</span></div>
                                                     <div className="">Active Power: <span className="underline">{data.designConfig.active_power}</span></div>
-                                                    <div className="">Azimuth: <span className="underline">{data.designConfig.azimuth}</span></div>
+                                                    <div className="">Panel Azimuth Degree: <span className="underline">{data.designConfig.panelAzimuthDeg}</span></div>
                                                     <div className="">Bifaciality Factor: <span className="underline">{data.designConfig.bifaciality_factor}</span></div>
                                                     <div className="">GCR: <span className="underline">{data.designConfig.gcr}</span></div>
-                                                    <div className="">Ground Albido: <span className="underline">{data.designConfig.ground_albido}</span></div>
+                                                    <div className="">Albido: <span className="underline">{data.designConfig.albido}</span></div>
                                                     <div className="">Height above Ground: <span className="underline">{data.designConfig.height_above_ground}</span></div>
                                                     <div className="">Limit Profile Angle: <span className="underline">{data.designConfig.limit_profile_angle}</span></div>
                                                     <div className="">PNOM Ratio: <span className="underline">{data.designConfig.pnom_ratio}</span></div>
@@ -159,17 +174,22 @@ const MyDashboard = () => {
                                                     <div className="">Shed Transparent Fraction: <span className="underline">{data.designConfig.shed_transparent_fraction}</span></div>
                                                     <div className="">Sheds Spacing: <span className="underline">{data.designConfig.sheds_spacing}</span></div>
                                                     <div className="">Sheds Width: <span className="underline">{data.designConfig.sheds_width}</span></div>
-                                                    <div className="">Tilt: <span className="underline">{data.designConfig.tilt}</span></div>
+                                                    <div className="">Tilt Degree: <span className="underline">{data.designConfig.tiltDeg}</span></div>
                                                     <div className="">Tracker Spacing: <span className="underline">{data.designConfig.tracker_spacing}</span></div>
                                                     <div className="">Tracker Width: <span className="underline">{data.designConfig.tracker_width}</span></div>
-                                                    <div className="pb-3">Tracking Axis Horizontal: <span className="underline">{data.designConfig.tracking_axis_horizontal}</span></div>
+                                                    <div className="">Tracking Axis Horizontal: <span className="underline">{data.designConfig.tracking_axis_horizontal}</span></div>
+                                                    <div className="">I Am Factor: <span className="underline">{data.designConfig.iamB0}</span></div>
+                                                    <div className="">Soiling Loss Fractor: <span className="underline">{data.designConfig.soilingLossFrac}</span></div>
+                                                    <div className="">Shading Loss Fractor: <span className="underline">{data.designConfig.shadingLossFrac}</span></div>
+                                                    <div className="">Other Optical Loss Fractor: <span className="underline">{data.designConfig.otherOpticalLossFrac}</span></div>
+                                                    <div className="">System Loss Fractor: <span className="underline">{data.designConfig.systemLossFrac}</span></div>
                                                 </div>
                                             </div>
                                         </div>
                                         <div className="flex  bg-gray-50 p-4">
-                                            <button className="border text-sm bg-gray-200 border-gray-200 px-1 py-2 hover:bg-green-400 duration-100" onClick={() => calculateIrridationData(data.projectId)}>Load Irradiation Data</button>
-                                            <button className="border text-sm bg-gray-200 border-l-gray-300 px-1 py-2 hover:bg-green-400 duration-100" onClick={() => calculateGlobalIrridationData(data.projectId)}>Load Global Irradiation Data</button>
-                                            <button className="border text-sm bg-gray-200 border-l-gray-300 px-1 py-2 hover:bg-green-400 duration-100" onClick={() => calculateGraph(data.projectId)}>Create Graph</button>
+                                            <button className="border text-sm bg-gray-200 border-gray-200 px-1 py-2 hover:bg-green-400 duration-100" onClick={() => calculateIrridationData(data.projectId, data.project_latitude, data.project_longitude, data.year)}>Load Weather Data</button>
+                                            <button className="border text-sm bg-gray-200 border-l-gray-300 px-1 py-2 hover:bg-green-400 duration-100" onClick={() => calculateGTI(data.projectId, data.project_latitude, data.project_longitude, data.designConfig.albido, data.designConfig.tiltDeg, data.designConfig.panelAzimuthDeg, data.designConfig.iamB0, data.designConfig.soilingLossFrac, data.designConfig.shadingLossFrac, data.designConfig.systemLossFrac, data.designConfig.otherOpticalLossFrac)}>Calculate GTI</button>
+                                            <button className="border text-sm bg-gray-200 border-l-gray-300 px-1 py-2 hover:bg-green-400 duration-100" onClick={() => startSimulation(data.projectId)}>Create Graph</button>
                                             <button className="border text-sm bg-gray-200 border-l-gray-300 px-1 py-2 hover:bg-green-400 duration-100" onClick={() => generateGraph(data.projectId)}>Show Graph</button>
                                         </div>
                                     </div>

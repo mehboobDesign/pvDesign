@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { StepperContext } from "../../../../context/StepperProvider";
-import Axios from "../../../../api/Axios";
+//import Axios from "../../../../api/Axios";
 //import { StepperProvider } from "../../../../context/StepperProvider";
 import Stepper from "../../../Common/Stepper";
 import StepperControl from "../../../Common/StepperControl";
@@ -9,7 +9,7 @@ import Final from "./Final";
 import Payment from "./Payment";
 import SelectPlan from "./SelectPlan";
 
-const SUBSCRIPTION = '/subscription/subscribe/';
+//const SUBSCRIPTION = '/subscription/subscribe/';
 
 const UserSubscription = ({ userId }) => {
 
@@ -40,16 +40,16 @@ const UserSubscription = ({ userId }) => {
         newStep > 0 && newStep <= steps.length && setCurrentStep(newStep);
     }
 
-    const goToSubscribed = async () => {
-        try {
-            const response = await Axios.post(SUBSCRIPTION.concat(userId).concat(/plan/).concat('BASIC').concat(/months/).concat(2)
+    // const goToSubscribed = async () => {
+    //     try {
+    //         const response = await Axios.post(SUBSCRIPTION.concat(userId).concat(/plan/).concat('BASIC').concat(/months/).concat(2)
 
-            );
-            console.log(response);
-        } catch (err) {
-            console.log(err);
-        }
-    }
+    //         );
+    //         console.log(response);
+    //     } catch (err) {
+    //         console.log(err);
+    //     }
+    // }
     return (
         <div className="md:w-full mx-auto shadow-xl rounded-2xl pb-2">
             <div className="">
