@@ -8,6 +8,7 @@ import Input from "../../Common/Input";
 import AlertModal from "../../Common/Modal/AlertModal";
 import SelectSearch from "../../Common/SelectSearch";
 import UseAuth from "../../Hooks/UseAuth";
+//import Radio from "../../Common/RadioButton/Radio";
 
 const GET_PVMODULES_URL = 'pvmodules/';
 const GET_INVERTER_URL = 'inverter/';
@@ -103,6 +104,26 @@ const ConfigureProject = () => {
     const [pvModuleData, setPvModuleData] = useState([]);
     const [pvModuleId, setPvModuleId] = useState('');
 
+    const [iAmFactor, setIAmFactor] = useState();
+    const [validIAmFactor, setValidIAmFactor] = useState(false);
+    const [iAmFactorFocus, setIAmFactorFocus] = useState(false);
+
+    const [soilingLossFrac, setSoilingLossFrac] = useState();
+    const [validSoilingLossFrac, setValidSoilingLossFrac] = useState(false);
+    const [soilingLossFracFocus, setSoilingLossFracFocus] = useState(false);
+
+    const [shadingLossFrac, setShadingLossFrac] = useState();
+    const [validShadingLossFrac, setValidShadingLossFrac] = useState(false);
+    const [shadingLossFracFocus, setShadingLossFracFocus] = useState(false);
+
+    const [otherOpticalLossFrac, setOtherOpticalLossFrac] = useState();
+    const [validOtherOpticalLossFrac, setValidOtherOpticalLossFrac] = useState(false);
+    const [otherOpticalLossFracFocus, setOtherOpticalLossFracFocus] = useState(false);
+
+    const [systemLossFrac, setSystemLossFrac] = useState();
+    const [validSystemLossFrac, setValidSystemLossFrac] = useState(false);
+    const [systemLossFracFocus, setSystemLossFracFocus] = useState(false);
+
     const [errorAlert, setErrorAlert] = useState(false);
     const [successAlert, setSuccessAlert] = useState(false);
 
@@ -192,6 +213,26 @@ const ConfigureProject = () => {
         const result = NUMBER_DECIMAL.test(pnomRatio);
         setValidPnomRatio(result);
     }, [pnomRatio]);
+    useEffect(() => {
+        const result = ONLY_INTEGER.test(iAmFactor);
+        setValidIAmFactor(result);
+    }, [iAmFactor]);
+    useEffect(() => {
+        const result = ONLY_INTEGER.test(soilingLossFrac);
+        setValidSoilingLossFrac(result);
+    }, [soilingLossFrac]);
+    useEffect(() => {
+        const result = ONLY_INTEGER.test(shadingLossFrac);
+        setValidShadingLossFrac(result);
+    }, [shadingLossFrac]);
+    useEffect(() => {
+        const result = ONLY_INTEGER.test(otherOpticalLossFrac);
+        setValidOtherOpticalLossFrac(result);
+    }, [otherOpticalLossFrac]);
+    useEffect(() => {
+        const result = ONLY_INTEGER.test(systemLossFrac);
+        setValidSystemLossFrac(result);
+    }, [systemLossFrac]);
 
 
     useEffect(() => {
@@ -252,8 +293,8 @@ const ConfigureProject = () => {
             validRearFactor && validRearLoss && validShedFunction && validActivePower && validPnomRatio) {
             const data = {
                 designName: designName,
-                tilt: tilt,
-                azimuth: azimuth,
+                tiltDeg: tilt,
+                panelAzimuthDeg: azimuth,
                 tracking_axis_horizontal: trackingAxis,
                 sheds_spacing: shedsSpacing,
                 tracker_spacing: trackerSpacing,
@@ -262,15 +303,21 @@ const ConfigureProject = () => {
                 limit_profile_angle: limitProfileAngle,
                 gcr: gcr,
                 height_above_ground: heightAboveGround,
-                ground_albido: groundAlbido,
+                albido: groundAlbido,
                 bifaciality_factor: biFactor,
                 rear_shading_factor: rearFactor,
                 rear_mismatch_loss: rearLoss,
                 shed_transparent_fraction: shedFunction,
                 active_power: activePower,
                 pnom_ratio: pnomRatio,
+                iamB0: iAmFactor / 100,
+                soilingLossFrac: soilingLossFrac / 100,
+                shadingLossFrac: shadingLossFrac / 100,
+                otherOpticalLossFrac: otherOpticalLossFrac / 100,
+                systemLossFrac: systemLossFrac / 100
             }
             try {
+                console.log(data);
                 const response = await Axios.post(PV.concat(pvModuleId).concat(INV).concat(inverterId).concat(USER).concat(auth.userId).concat(CONFIG), data);
                 console.log(JSON.stringify(response?.data));
                 setSuccessAlert(true);
@@ -295,7 +342,22 @@ const ConfigureProject = () => {
         <>
             <form className="w-full" onSubmit={handleSubmit}>
                 <div className="flex flex-wrap">
-                    <div className="w-full md:w-1/4 mb-4">
+                    <div className="w-full md:w-1/3">
+                        <Label htmlFor="design_name" nameOfLabel="Design Name" validRule={validDesignName} nameOfState={designName} />
+                        <Input id="design_name" value={designName} autoComplete="off"
+                            onChange={(e) => setDesignName(e.target.value)}
+                            aria_invalid={validDesignName ? "false" : "true"}
+                            aria_describedby="designNameNote"
+                            onFocus={() => setDesignNameFocus(true)}
+                            onBlur={() => setDesignNameFocus(false)}
+                            focusValue={designNameFocus}
+                            validValue={validDesignName}
+                            errorMesg="Only Alphabets are accepted with minimum of 3 character length."
+                        />
+                    </div>
+                </div>
+                <div className="flex flex-wrap pt-5">
+                    <div className="w-full md:w-1/3">
                         <SelectSearch
                             id="inverterName"
                             label="Select Inverter Module"
@@ -315,7 +377,7 @@ const ConfigureProject = () => {
                             errorMsg="Please select one inverter module from the list."
                         />
                     </div>
-                    <div className="w-full md:w-1/4 px-3 mb-4">
+                    <div className="w-full md:w-1/3 pl-3">
                         <SelectSearch
                             id="pvModuleName"
                             label="Select Pv Module"
@@ -335,21 +397,10 @@ const ConfigureProject = () => {
                             errorMsg="Please select one PV module from the list."
                         />
                     </div>
+                </div>
+                <div className="flex flex-wrap pt-5">
                     <div className="w-full md:w-1/4 mb-4">
-                        <Label htmlFor="design_name" nameOfLabel="Design Name" validRule={validDesignName} nameOfState={designName} />
-                        <Input id="design_name" value={designName} autoComplete="off"
-                            onChange={(e) => setDesignName(e.target.value)}
-                            aria_invalid={validDesignName ? "false" : "true"}
-                            aria_describedby="designNameNote"
-                            onFocus={() => setDesignNameFocus(true)}
-                            onBlur={() => setDesignNameFocus(false)}
-                            focusValue={designNameFocus}
-                            validValue={validDesignName}
-                            errorMesg="Only Alphabets are accepted with minimum of 3 character length."
-                        />
-                    </div>
-                    <div className="w-full md:w-1/4 px-3 mb-4">
-                        <Label htmlFor="tilt" nameOfLabel="Tilt" validRule={validTilt} nameOfState={tilt} />
+                        <Label htmlFor="tilt" nameOfLabel="Tilt Degree" validRule={validTilt} nameOfState={tilt} />
                         <Input id="tilt" value={tilt} autoComplete="off"
                             onChange={(e) => setTilt(e.target.value)}
                             aria_invalid={validTilt ? "false" : "true"}
@@ -361,8 +412,10 @@ const ConfigureProject = () => {
                             errorMesg="Only positive numbers allowed upto 4 digit."
                         />
                     </div>
-                    <div className="w-full md:w-1/4 mb-4">
-                        <Label htmlFor="azimuth" nameOfLabel="Azimuth" validRule={validAzimuth} nameOfState={azimuth} />
+                    <div className="w-full md:w-1/4 pl-3 mb-4">
+                        {/* <Label htmlFor="azimuth" nameOfLabel="Panel Azimuth" />
+                        <Radio /> */}
+                        <Label htmlFor="azimuth" nameOfLabel="Panel Azimuth Degree" validRule={validAzimuth} nameOfState={azimuth} />
                         <Input id="azimuth" value={azimuth} autoComplete="off"
                             onChange={(e) => setAzimuth(e.target.value)}
                             aria_invalid={validAzimuth ? "false" : "true"}
@@ -374,7 +427,7 @@ const ConfigureProject = () => {
                             errorMesg="Only positive numbers allowed upto 4 digit."
                         />
                     </div>
-                    <div className="w-full md:w-1/4 px-3 mb-4">
+                    <div className="w-full md:w-1/4 pl-3 mb-4">
                         <Label htmlFor="tracking_axis_horizontal" nameOfLabel="Tracking Axis Horizontal" validRule={validTrackingAxis} nameOfState={trackingAxis} />
                         <Input id="tracking_axis_horizontal" value={trackingAxis} autoComplete="off"
                             onChange={(e) => setTrackingAxis(e.target.value)}
@@ -387,7 +440,7 @@ const ConfigureProject = () => {
                             errorMesg="Only positive numbers allowed upto 4 digit."
                         />
                     </div>
-                    <div className="w-full md:w-1/4 mb-4">
+                    <div className="w-full md:w-1/4 pl-3 mb-4">
                         <Label htmlFor="sheds_spacing" nameOfLabel="Sheds Spacing" validRule={validShedsSpacing} nameOfState={shedsSpacing} />
                         <Input id="sheds_spacing" value={shedsSpacing} autoComplete="off"
                             onChange={(e) => setShedsSpacing(e.target.value)}
@@ -400,7 +453,7 @@ const ConfigureProject = () => {
                             errorMesg="Only numbers allowed with decimal or not."
                         />
                     </div>
-                    <div className="w-full md:w-1/4 px-3 mb-4">
+                    <div className="w-full md:w-1/4 mb-4">
                         <Label htmlFor="tracker_spacing" nameOfLabel="Tracker Spacing" validRule={validTrackerSpacing} nameOfState={trackerSpacing} />
                         <Input id="tracker_spacing" value={trackerSpacing} autoComplete="off"
                             onChange={(e) => setTrackerSpacing(e.target.value)}
@@ -413,7 +466,7 @@ const ConfigureProject = () => {
                             errorMesg="Only numbers allowed with decimal or not."
                         />
                     </div>
-                    <div className="w-full md:w-1/4 mb-4">
+                    <div className="w-full md:w-1/4 pl-3 mb-4">
                         <Label htmlFor="sheds_width" nameOfLabel="Sheds Width" validRule={validShedsWidth} nameOfState={shedsWidth} />
                         <Input id="sheds_width" value={shedsWidth} autoComplete="off"
                             onChange={(e) => setShedsWidth(e.target.value)}
@@ -426,7 +479,7 @@ const ConfigureProject = () => {
                             errorMesg="Only numbers allowed with decimal or not."
                         />
                     </div>
-                    <div className="w-full md:w-1/4 px-3 mb-4">
+                    <div className="w-full md:w-1/4 pl-3 mb-4">
                         <Label htmlFor="tracker_width" nameOfLabel="Tracker Width" validRule={validTrackerWidth} nameOfState={trackerWidth} />
                         <Input id="tracker_width" value={trackerWidth} autoComplete="off"
                             onChange={(e) => setTrackerWidth(e.target.value)}
@@ -439,7 +492,7 @@ const ConfigureProject = () => {
                             errorMesg="Only numbers allowed with decimal or not."
                         />
                     </div>
-                    <div className="w-full md:w-1/4 mb-4">
+                    <div className="w-full md:w-1/4 pl-3 mb-4">
                         <Label htmlFor="limit_profile_angle" nameOfLabel="Limit Profile Angle" validRule={validLimitProfileAngle} nameOfState={limitProfileAngle} />
                         <Input id="limit_profile_angle" value={limitProfileAngle} autoComplete="off"
                             onChange={(e) => setLimitProfileAngle(e.target.value)}
@@ -452,7 +505,7 @@ const ConfigureProject = () => {
                             errorMesg="Only positive numbers allowed upto 4 digit."
                         />
                     </div>
-                    <div className="w-full md:w-1/4 px-3 mb-4">
+                    <div className="w-full md:w-1/4 mb-4">
                         <Label htmlFor="gcr" nameOfLabel="GCR" validRule={validGcr} nameOfState={gcr} />
                         <Input id="gcr" value={gcr} autoComplete="off"
                             onChange={(e) => setGcr(e.target.value)}
@@ -465,7 +518,7 @@ const ConfigureProject = () => {
                             errorMesg="Only numbers allowed with decimal or not."
                         />
                     </div>
-                    <div className="w-full md:w-1/4 mb-4">
+                    <div className="w-full md:w-1/4 pl-3 mb-4">
                         <Label htmlFor="height_above_ground" nameOfLabel="Height Above Ground" validRule={validHeightAboveGround} nameOfState={heightAboveGround} />
                         <Input id="height_above_ground" value={heightAboveGround} autoComplete="off"
                             onChange={(e) => setHeightAboveGround(e.target.value)}
@@ -478,7 +531,7 @@ const ConfigureProject = () => {
                             errorMesg="Only numbers allowed with decimal or not."
                         />
                     </div>
-                    <div className="w-full md:w-1/4 px-3 mb-4">
+                    <div className="w-full md:w-1/4 pl-3 mb-4">
                         <Label htmlFor="ground_albido" nameOfLabel="Ground Albido" validRule={validGroundAlbido} nameOfState={groundAlbido} />
                         <Input id="ground_albido" value={groundAlbido} autoComplete="off"
                             onChange={(e) => setGroundAlbido(e.target.value)}
@@ -491,7 +544,7 @@ const ConfigureProject = () => {
                             errorMesg="Only numbers allowed with decimal or not."
                         />
                     </div>
-                    <div className="w-full md:w-1/4 mb-4">
+                    <div className="w-full md:w-1/4 pl-3 mb-4">
                         <Label htmlFor="bi_factor" nameOfLabel="Bifaciality Factor" validRule={validBiFactor} nameOfState={biFactor} />
                         <Input id="bi_factor" value={biFactor} autoComplete="off"
                             onChange={(e) => setBiFactor(e.target.value)}
@@ -504,7 +557,7 @@ const ConfigureProject = () => {
                             errorMesg="Only numbers allowed with decimal or not."
                         />
                     </div>
-                    <div className="w-full md:w-1/4 px-3 mb-4">
+                    <div className="w-full md:w-1/4 mb-4">
                         <Label htmlFor="rear_factor" nameOfLabel="Rear Shading Factor" validRule={validRearFactor} nameOfState={rearFactor} />
                         <Input id="rear_factor" value={rearFactor} autoComplete="off"
                             onChange={(e) => setRearFactor(e.target.value)}
@@ -517,7 +570,7 @@ const ConfigureProject = () => {
                             errorMesg="Only numbers allowed with decimal or not."
                         />
                     </div>
-                    <div className="w-full md:w-1/4 mb-4">
+                    <div className="w-full md:w-1/4 pl-3 mb-4">
                         <Label htmlFor="rear_loss" nameOfLabel="Rear Mismatch Loss" validRule={validRearLoss} nameOfState={rearLoss} />
                         <Input id="rear_loss" value={rearLoss} autoComplete="off"
                             onChange={(e) => setRearLoss(e.target.value)}
@@ -530,7 +583,7 @@ const ConfigureProject = () => {
                             errorMesg="Only numbers allowed with decimal or not."
                         />
                     </div>
-                    <div className="w-full md:w-1/4 px-3 mb-4">
+                    <div className="w-full md:w-1/4 pl-3 mb-4">
                         <Label htmlFor="shed_function" nameOfLabel="Shed Transparent Function" validRule={validShedFunction} nameOfState={shedFunction} />
                         <Input id="shed_function" value={shedFunction} autoComplete="off"
                             onChange={(e) => setShedFunction(e.target.value)}
@@ -543,7 +596,7 @@ const ConfigureProject = () => {
                             errorMesg="Only numbers allowed with decimal or not."
                         />
                     </div>
-                    <div className="w-full md:w-1/4 mb-4">
+                    <div className="w-full md:w-1/4 pl-3 mb-4">
                         <Label htmlFor="active_power" nameOfLabel="Active Power" validRule={validActivePower} nameOfState={activePower} />
                         <Input id="active_power" value={activePower} autoComplete="off"
                             onChange={(e) => setActivePower(e.target.value)}
@@ -556,7 +609,7 @@ const ConfigureProject = () => {
                             errorMesg="Only numbers allowed with decimal or not."
                         />
                     </div>
-                    <div className="w-full md:w-1/4 px-3 mb-4">
+                    <div className="w-full md:w-1/4 mb-4">
                         <Label htmlFor="pnomRatio" nameOfLabel="PNOM Ratio(DC:AC)" validRule={validPnomRatio} nameOfState={pnomRatio} />
                         <Input id="pnomRatio" value={pnomRatio} autoComplete="off"
                             onChange={(e) => setPnomRatio(e.target.value)}
@@ -569,11 +622,76 @@ const ConfigureProject = () => {
                             errorMesg="Allowed only decimal number with two decimial digits."
                         />
                     </div>
+                    <div className="w-full md:w-1/4 pl-3 mb-4">
+                        <Label htmlFor="iAmFactor" nameOfLabel="IAmFactor" validRule={validIAmFactor} nameOfState={iAmFactor} />
+                        <Input id="iAmFactor" value={iAmFactor} autoComplete="off"
+                            onChange={(e) => setIAmFactor(e.target.value)}
+                            aria_invalid={validIAmFactor ? "false" : "true"}
+                            aria_describedby="validIAmFactorNote"
+                            onFocus={() => setIAmFactorFocus(true)}
+                            onBlur={() => setIAmFactorFocus(false)}
+                            focusValue={iAmFactorFocus}
+                            validValue={validIAmFactor}
+                            errorMesg="Allowed only integers."
+                        />
+                    </div>
+                    <div className="w-full md:w-1/4 pl-3 mb-4">
+                        <Label htmlFor="soilingLossFrac" nameOfLabel="Soiling Loss Fraction" validRule={validSoilingLossFrac} nameOfState={soilingLossFrac} />
+                        <Input id="soilingLossFrac" value={soilingLossFrac} autoComplete="off"
+                            onChange={(e) => setSoilingLossFrac(e.target.value)}
+                            aria_invalid={validSoilingLossFrac ? "false" : "true"}
+                            aria_describedby="validSoilingLossFracNote"
+                            onFocus={() => setSoilingLossFracFocus(true)}
+                            onBlur={() => setSoilingLossFracFocus(false)}
+                            focusValue={soilingLossFracFocus}
+                            validValue={validSoilingLossFrac}
+                            errorMesg="Allowed only integers."
+                        />
+                    </div>
+                    <div className="w-full md:w-1/4 pl-3 mb-4">
+                        <Label htmlFor="shadingLossFrac" nameOfLabel="Shading Loss Fraction" validRule={validShadingLossFrac} nameOfState={shadingLossFrac} />
+                        <Input id="shadingLossFrac" value={shadingLossFrac} autoComplete="off"
+                            onChange={(e) => setShadingLossFrac(e.target.value)}
+                            aria_invalid={validShadingLossFrac ? "false" : "true"}
+                            aria_describedby="validShadingLossFracNote"
+                            onFocus={() => setShadingLossFracFocus(true)}
+                            onBlur={() => setShadingLossFracFocus(false)}
+                            focusValue={shadingLossFracFocus}
+                            validValue={validShadingLossFrac}
+                            errorMesg="Allowed only integers."
+                        />
+                    </div>
+                    <div className="w-full md:w-1/4 mb-4">
+                        <Label htmlFor="otherOpticalLossFrac" nameOfLabel="Other Optical Loss Fraction" validRule={validOtherOpticalLossFrac} nameOfState={otherOpticalLossFrac} />
+                        <Input id="otherOpticalLossFrac" value={otherOpticalLossFrac} autoComplete="off"
+                            onChange={(e) => setOtherOpticalLossFrac(e.target.value)}
+                            aria_invalid={validOtherOpticalLossFrac ? "false" : "true"}
+                            aria_describedby="validOtherOpticalLossFracNote"
+                            onFocus={() => setOtherOpticalLossFracFocus(true)}
+                            onBlur={() => setOtherOpticalLossFracFocus(false)}
+                            focusValue={otherOpticalLossFracFocus}
+                            validValue={validOtherOpticalLossFrac}
+                            errorMesg="Allowed only integers."
+                        />
+                    </div>
+                    <div className="w-full md:w-1/4 pl-3 mb-4">
+                        <Label htmlFor="systemLossFrac" nameOfLabel="System Loss Fraction" validRule={validSystemLossFrac} nameOfState={systemLossFrac} />
+                        <Input id="systemLossFrac" value={systemLossFrac} autoComplete="off"
+                            onChange={(e) => setSystemLossFrac(e.target.value)}
+                            aria_invalid={validSystemLossFrac ? "false" : "true"}
+                            aria_describedby="validSystemLossFracNote"
+                            onFocus={() => setSystemLossFracFocus(true)}
+                            onBlur={() => setSystemLossFracFocus(false)}
+                            focusValue={systemLossFracFocus}
+                            validValue={validSystemLossFrac}
+                            errorMesg="Allowed only integers."
+                        />
+                    </div>
                     <div className="w-full">
                         <button className="bg-slate-300 hover:bg-orange-400 hover:text-white text-sm text-gray-800 p-2 font-bold inline-flex items-center">
                             {/* <FontAwesomeIcon className="p-2" icon={faFileExport} size="1x" /> */}
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="size-4">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 3.75V16.5L12 14.25 7.5 16.5V3.75m9 0H18A2.25 2.25 0 0 1 20.25 6v12A2.25 2.25 0 0 1 18 20.25H6A2.25 2.25 0 0 1 3.75 18V6A2.25 2.25 0 0 1 6 3.75h1.5m9 0h-9" />
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-4">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 3.75V16.5L12 14.25 7.5 16.5V3.75m9 0H18A2.25 2.25 0 0 1 20.25 6v12A2.25 2.25 0 0 1 18 20.25H6A2.25 2.25 0 0 1 3.75 18V6A2.25 2.25 0 0 1 6 3.75h1.5m9 0h-9" />
                             </svg>
                             <span className="text-md">Save Configuration</span>
                         </button>

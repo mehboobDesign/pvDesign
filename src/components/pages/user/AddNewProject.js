@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import Axios from "../../../api/Axios";
 import Label from "../../Common/Label";
 import Input from "../../Common/Input";
-import { NOT_SPECIAL_CHAR, DIRECTION, VALID_YEAR, CHAR_REGEX } from '../../Common/ValidationConstants';
+import { NOT_SPECIAL_CHAR, DIRECTION, CHAR_REGEX } from '../../Common/ValidationConstants';
 import AlertModal from "../../Common/Modal/AlertModal";
 import SelectSearch from "../../Common/SelectSearch";
 import UseAuth from "../../Hooks/UseAuth";
@@ -40,11 +40,20 @@ const AddNewProject = () => {
     //const [longitudeFocus, setLongitudeFocus] = useState(false);
 
     const [year, setYear] = useState('');
-    const [validYear, setValidYear] = useState(false);
-    const [yearFocus, setYearFocus] = useState(false);
+    // const [validYear, setValidYear] = useState(false);
+    // const [yearFocus, setYearFocus] = useState(false);
 
     const [errorAlert, setErrorAlert] = useState(false);
     const [successAlert, setSuccessAlert] = useState(false);
+
+    useEffect(() => {
+        const getCurrentYear = () => {
+            const currentYear = new Date().getFullYear();
+            console.log(currentYear);
+            setYear(currentYear);
+        }
+        getCurrentYear();
+    }, [])
 
     const inputRef = useRef();
     let libRef = useRef(libraries)
@@ -58,11 +67,12 @@ const AddNewProject = () => {
         const [place] = inputRef.current.getPlaces();
 
         if (place) {
-            console.log(place.formatted_address);
+            //console.log(place)
+            //console.log(place.formatted_address);
             setProjectLocation(place.formatted_address)
-            console.log(place.geometry.location.lat());
+            //console.log(place.geometry.location.lat());
             setLatitude(place.geometry.location.lat());
-            console.log(place.geometry.location.lng());
+            //console.log(place.geometry.location.lng());
             setLongitude(place.geometry.location.lng());
         }
     };
@@ -90,10 +100,10 @@ const AddNewProject = () => {
         const result = DIRECTION.test(longitude);
         setValidLongitude(result);
     }, [longitude]);
-    useEffect(() => {
-        const result = VALID_YEAR.test(year);
-        setValidYear(result);
-    }, [year]);
+    // useEffect(() => {
+    //     const result = VALID_YEAR.test(year);
+    //     setValidYear(result);
+    // }, [year]);
 
     useEffect(() => {
         const getAllDesignConfigById = async () => {
@@ -110,7 +120,7 @@ const AddNewProject = () => {
     }, [auth.userId]);
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (validDesignName && validProjectName && validProjectLocation && validLatitude && validLongitude && validYear) {
+        if (validDesignName && validProjectName && validProjectLocation && validLatitude && validLongitude) {
             const data = {
                 project_name: projectName,
                 project_location: projectLocation,
@@ -122,7 +132,8 @@ const AddNewProject = () => {
                 const response = await Axios.post(NEW_PROJECT.concat(designId).concat('/user/').concat(auth.userId), data);
                 console.log(JSON.stringify(response?.data));
                 setSuccessAlert(true);
-            } catch (err) {
+            }
+            catch (err) {
                 console.log(err);
             }
         } else {
@@ -238,7 +249,7 @@ const AddNewProject = () => {
                         <Label htmlFor="longitude" nameOfLabel="Longitude" validRule={validLongitude} nameOfState={longitude} />
                         <Input id="longitude" value={longitude} disabled={true} />
                     </div>
-                    <div className="">
+                    {/* <div className="">
                         <Label htmlFor="year" nameOfLabel="Year" validRule={validYear} nameOfState={year} />
                         <Input id="year" value={year} autoComplete="off"
                             onChange={(e) => setYear(e.target.value)}
@@ -250,7 +261,7 @@ const AddNewProject = () => {
                             validValue={validYear}
                             errorMesg="Year should be YYYY format, only number of 4 digits accept"
                         />
-                    </div>
+                    </div> */}
                 </div>
                 <div className="mt-4">
                     <button className="bg-slate-300 hover:bg-orange-400 text-sm hover:text-white text-gray-800 p-2 font-bold inline-flex items-center">

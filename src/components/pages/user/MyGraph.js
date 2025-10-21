@@ -7,7 +7,7 @@ import Axios from "../../../api/Axios";
 import { IRRADIATION_DATAS } from "../../Common/ValidationConstants";
 ChartJS.register(...registerables);
 
-const RESULT = '/results/project/';
+const RESULT = '/finalresults/project/';
 const MyGraph = ({ id, onClose }) => {
     const [summaryData, setSummaryData] = useState(['']);
     const [projectData, setProjectData] = useState(['']);
