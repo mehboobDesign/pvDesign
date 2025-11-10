@@ -6,6 +6,7 @@ import { NOT_SPECIAL_CHAR, DIRECTION, CHAR_REGEX } from '../../Common/Validation
 import AlertModal from "../../Common/Modal/AlertModal";
 import SelectSearch from "../../Common/SelectSearch";
 import UseAuth from "../../Hooks/UseAuth";
+import DesignByIdModal from "../../Common/Modal/DesignByIdModal";
 
 import { StandaloneSearchBox, useJsApiLoader } from "@react-google-maps/api";
 
@@ -14,6 +15,7 @@ const libraries = ['places'];
 const NEW_PROJECT = 'v1/projects/create/design/';
 
 const DESIGN_CONFIG = 'design/user/';
+
 
 const AddNewProject = () => {
     const { auth } = UseAuth();
@@ -149,12 +151,12 @@ const AddNewProject = () => {
         setYear('');
         setSuccessAlert(false);
     }
+    const [showDesign, setShowDesign] = useState(false);
     const setSelectedDesignName = (selectedName) => {
         setDesignName(selectedName);
         setDesignId(selectedName.designId);
+        setShowDesign(true);
     };
-
-
 
     return (
         <>
@@ -286,6 +288,7 @@ const AddNewProject = () => {
                     </div>
                 </div>
             </AlertModal>
+            <DesignByIdModal modalOpen={showDesign} onClose={() => setShowDesign(false)} id={designId} />
         </>
     );
 }

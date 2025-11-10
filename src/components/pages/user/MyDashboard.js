@@ -24,6 +24,9 @@ const MyDashboard = () => {
     const [errorAlert, setErrorAlert] = useState(false);
     const [successAlert, setSuccessAlert] = useState(false);
     const [irrMesg, setIrrMesg] = useState('');
+
+
+
     //const [isSubscribed, setIsSubscribed] = useState('');
 
     // useEffect(() => {
@@ -48,7 +51,7 @@ const MyDashboard = () => {
                     await Axios.get(MY_PROJECT.concat(auth.userId))
                         .then(function (response) {
                             setProjectData(response.data);
-                            console.log(response.data);
+                            //console.log(response.data);
                             setUpdating(false);
                         })
                 } catch (err) {
@@ -63,13 +66,28 @@ const MyDashboard = () => {
         setModalOpen(true);
     };
 
-    const calculateIrridationData = async (project_id, project_latitude, project_longitude, project_year) => {
+    const calculateWHData = async (project_id, project_latitude, project_longitude, project_year) => {
         try {
             // const response = await Axios.post(CREATE_IRRIDATION.concat(project_id), IRRADIATION_DATAS);
             // /create/lat/{lat}/lon/{lon}/tz/{tz}/year/{year}/project/{projectId}
             const response = await Axios.post(CREATE_LOAD_WH_DATA.concat('/lat/').concat(project_latitude).concat('/lon/').concat(project_longitude).concat('/tz/').concat('+05:30').concat('/year/').concat('2024').concat('/project/').concat(project_id));
             //console.log(JSON.stringify(response?.data));
-            console.log(response.data);
+
+            // if (!response.data.succcess) {
+            //     let prev = [...whStatus];
+            //     prev.push({
+            //         pid: project_id,
+            //         status: true
+            //     })
+            //     setWhStatus(prev);
+            // }
+            if (!response.data.succcess) {
+
+
+                //setWhStatus(project_id);
+            }
+
+
             //alert(JSON.stringify(response.data.message));
             setSuccessAlert(true);
             setIrrMesg(response?.data.message);
@@ -102,22 +120,28 @@ const MyDashboard = () => {
             console.log(err);
         }
     };
-    const generateGraph = (p_id) => {
-        setProjectId(p_id);
-        setShowGraph(true);
-    };
+
     const startSimulation = async (project_id) => {
         try {
             const response = await Axios.post(CAL_GRAPH.concat(project_id));
-            console.log(response.data);
-            //setSuccessAlert(true);
+            setSuccessAlert(true);
+            setIrrMesg(response?.data.msg);
         } catch (err) {
             console.log(err);
         }
     };
 
+    const generateGraph = (p_id) => {
+        setProjectId(p_id);
+        setShowGraph(true);
+    };
+
     return (
         <>
+
+
+
+
             {!showGraph &&
                 <div>
                     {projectData.length === 0 ?
@@ -130,19 +154,19 @@ const MyDashboard = () => {
                                     <div key={index} className='shadow-xl'>
                                         <div className="flex border-b bg-gray-50  border-gray-300 font-bold text-slate-800 ">
                                             <div className="basis-10/12">
-                                                <h1 className='text-md p-4'>Project Name: <span className="underline">{data.project_name}</span></h1>
+                                                <h1 className='text-md p-4'>Project Name: <span className="underline text-fuchsia-600">{data.project_name}</span></h1>
                                             </div>
                                             <div className="basis-2/12 p-3">
                                                 <div className="flex">
                                                     <div className="text-center">
-                                                        <button className='border border-gray-200 bg-gray-300 text-slate-700 hover:text-white hover:bg-green-700 p-1' onClick={() => editProject(data.projectId)}>
+                                                        <button className='bg-green-500 shadow-lg shadow-green-500/50  text-slate-700 hover:text-white hover:bg-green-600 p-1' onClick={() => editProject(data.projectId)}>
                                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-10 h-6">
                                                                 <path strokeLinecap="round" strokeLinejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125" />
                                                             </svg>
                                                         </button>
                                                     </div>
                                                     <div className="text-center">
-                                                        <button className='border border-gray-200 bg-gray-400 text-slate-700 hover:text-white hover:bg-red-500 p-1'>
+                                                        <button className='bg-red-500 shadow-lg shadow-red-500/50 text-white hover:text-white hover:bg-red-600 p-1'>
                                                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-10 h-6 fill-none">
                                                                 <path strokeLinecap="round" strokeLinejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
                                                             </svg>
@@ -151,47 +175,48 @@ const MyDashboard = () => {
                                                 </div>
                                             </div>
                                         </div>
-                                        <div className="flex">
+                                        <div className="flex p-2">
                                             <div className="basis-12/12 text-sm pl-4">
                                                 <div className="flex flex-wrap [&>*:nth-child(odd)]:md:w-[53%] [&>*:nth-child(even)]:md:w-[47%] [&>*]:pt-3">
-                                                    <div className="">Project Location: <span className="underline">{data.project_location}</span></div>
-                                                    <div className="">Project Latitude: <span className="underline">{data.project_latitude}</span></div>
-                                                    <div className="">Project Longitude: <span className="underline">{data.project_longitude}</span></div>
-                                                    <div className="">Year: <span className="underline">{data.year}</span></div>
-                                                    <div className="">Configuration Name: <span className="underline">{data.designConfig.designName}</span></div>
-                                                    <div className="">PvModule Name: <span className="underline">{data.designConfig.pvModule.manufacturer}</span></div>
-                                                    <div className="">Inverter Name: <span className="underline">{data.designConfig.inverter.manufacturer}</span></div>
-                                                    <div className="">Active Power: <span className="underline">{data.designConfig.active_power}</span></div>
-                                                    <div className="">Panel Azimuth Degree: <span className="underline">{data.designConfig.panelAzimuthDeg}</span></div>
-                                                    <div className="">Bifaciality Factor: <span className="underline">{data.designConfig.bifaciality_factor}</span></div>
-                                                    <div className="">GCR: <span className="underline">{data.designConfig.gcr}</span></div>
-                                                    <div className="">Albido: <span className="underline">{data.designConfig.albido}</span></div>
-                                                    <div className="">Height above Ground: <span className="underline">{data.designConfig.height_above_ground}</span></div>
-                                                    <div className="">Limit Profile Angle: <span className="underline">{data.designConfig.limit_profile_angle}</span></div>
-                                                    <div className="">PNOM Ratio: <span className="underline">{data.designConfig.pnom_ratio}</span></div>
-                                                    <div className="">Rear Mismatch Loss: <span className="underline">{data.designConfig.rear_mismatch_loss}</span></div>
-                                                    <div className="">Rear shading Factor: <span className="underline">{data.designConfig.rear_shading_factor}</span></div>
-                                                    <div className="">Shed Transparent Fraction: <span className="underline">{data.designConfig.shed_transparent_fraction}</span></div>
-                                                    <div className="">Sheds Spacing: <span className="underline">{data.designConfig.sheds_spacing}</span></div>
-                                                    <div className="">Sheds Width: <span className="underline">{data.designConfig.sheds_width}</span></div>
-                                                    <div className="">Tilt Degree: <span className="underline">{data.designConfig.tiltDeg}</span></div>
-                                                    <div className="">Tracker Spacing: <span className="underline">{data.designConfig.tracker_spacing}</span></div>
-                                                    <div className="">Tracker Width: <span className="underline">{data.designConfig.tracker_width}</span></div>
-                                                    <div className="">Tracking Axis Horizontal: <span className="underline">{data.designConfig.tracking_axis_horizontal}</span></div>
-                                                    <div className="">I Am Factor: <span className="underline">{data.designConfig.iamB0}</span></div>
-                                                    <div className="">Soiling Loss Fractor: <span className="underline">{data.designConfig.soilingLossFrac}</span></div>
-                                                    <div className="">Shading Loss Fractor: <span className="underline">{data.designConfig.shadingLossFrac}</span></div>
-                                                    <div className="">Other Optical Loss Fractor: <span className="underline">{data.designConfig.otherOpticalLossFrac}</span></div>
-                                                    <div className="">System Loss Fractor: <span className="underline">{data.designConfig.systemLossFrac}</span></div>
+                                                    <div className="">Project Location: <span className="underline text-fuchsia-600">{data.project_location}</span></div>
+                                                    <div className="">Project Latitude: <span className="underline text-fuchsia-600">{data.project_latitude}</span></div>
+                                                    <div className="">Project Longitude: <span className="underline text-fuchsia-600">{data.project_longitude}</span></div>
+                                                    <div className="">Year: <span className="underline text-fuchsia-600">{data.year}</span></div>
+                                                    <div className="">Configuration Name: <span className="underline text-fuchsia-600">{data.designConfig.designName}</span></div>
+                                                    <div className="">PvModule Name: <span className="underline text-fuchsia-600">{data.designConfig.pvModule.manufacturer}</span></div>
+                                                    <div className="">Inverter Name: <span className="underline text-fuchsia-600">{data.designConfig.inverter.manufacturer}</span></div>
+                                                    <div className="">Active Power: <span className="underline text-fuchsia-600">{data.designConfig.active_power}</span></div>
+                                                    <div className="">Panel Azimuth Degree: <span className="underline text-fuchsia-600">{data.designConfig.panelAzimuthDeg}</span></div>
+                                                    <div className="">Bifaciality Factor: <span className="underline text-fuchsia-600">{data.designConfig.bifaciality_factor}</span></div>
+                                                    <div className="">GCR: <span className="underline text-fuchsia-600">{data.designConfig.gcr}</span></div>
+                                                    <div className="">Albido: <span className="underline text-fuchsia-600">{data.designConfig.albido}</span></div>
+                                                    <div className="">Height above Ground: <span className="underline text-fuchsia-600">{data.designConfig.height_above_ground}</span></div>
+                                                    <div className="">Limit Profile Angle: <span className="underline text-fuchsia-600">{data.designConfig.limit_profile_angle}</span></div>
+                                                    <div className="">PNOM Ratio: <span className="underline text-fuchsia-600">{data.designConfig.pnom_ratio}</span></div>
+                                                    <div className="">Rear Mismatch Loss: <span className="underline text-fuchsia-600">{data.designConfig.rear_mismatch_loss}</span></div>
+                                                    <div className="">Rear shading Factor: <span className="underline text-fuchsia-600">{data.designConfig.rear_shading_factor}</span></div>
+                                                    <div className="">Shed Transparent Fraction: <span className="underline text-fuchsia-600">{data.designConfig.shed_transparent_fraction}</span></div>
+                                                    <div className="">Sheds Spacing: <span className="underline text-fuchsia-600">{data.designConfig.sheds_spacing}</span></div>
+                                                    <div className="">Sheds Width: <span className="underline text-fuchsia-600">{data.designConfig.sheds_width}</span></div>
+                                                    <div className="">Tilt Degree: <span className="underline text-fuchsia-600">{data.designConfig.tiltDeg}</span></div>
+                                                    <div className="">Tracker Spacing: <span className="underline text-fuchsia-600">{data.designConfig.tracker_spacing}</span></div>
+                                                    <div className="">Tracker Width: <span className="underline text-fuchsia-600">{data.designConfig.tracker_width}</span></div>
+                                                    <div className="">Tracking Axis Horizontal: <span className="underline text-fuchsia-600">{data.designConfig.tracking_axis_horizontal}</span></div>
+                                                    <div className="">I Am Factor: <span className="underline text-fuchsia-600">{data.designConfig.iamB0}</span></div>
+                                                    <div className="">Soiling Loss Fractor: <span className="underline text-fuchsia-600">{data.designConfig.soilingLossFrac}</span></div>
+                                                    <div className="">Shading Loss Fractor: <span className="underline text-fuchsia-600">{data.designConfig.shadingLossFrac}</span></div>
+                                                    <div className="">Other Optical Loss Fractor: <span className="underline text-fuchsia-600">{data.designConfig.otherOpticalLossFrac}</span></div>
+                                                    <div className="">System Loss Fractor: <span className="underline text-fuchsia-600">{data.designConfig.systemLossFrac}</span></div>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div className="flex  bg-gray-50 p-4">
-                                            <button className="border text-sm bg-gray-200 border-gray-200 px-1 py-2 hover:bg-green-400 duration-100" onClick={() => calculateIrridationData(data.projectId, data.project_latitude, data.project_longitude, data.year)}>Load Weather Data</button>
-                                            <button className="border text-sm bg-gray-200 border-l-gray-300 px-1 py-2 hover:bg-green-400 duration-100" onClick={() => calculateGTI(data.projectId, data.project_latitude, data.project_longitude, data.designConfig.albido, data.designConfig.tiltDeg, data.designConfig.panelAzimuthDeg, data.designConfig.iamB0, data.designConfig.soilingLossFrac, data.designConfig.shadingLossFrac, data.designConfig.systemLossFrac, data.designConfig.otherOpticalLossFrac)}>Calculate GTI</button>
-                                            <button className="border text-sm bg-gray-200 border-l-gray-300 px-1 py-2 hover:bg-green-400 duration-100" onClick={() => startSimulation(data.projectId)}>Create Graph</button>
-                                            <button className="border text-sm bg-gray-200 border-l-gray-300 px-1 py-2 hover:bg-green-400 duration-100" onClick={() => generateGraph(data.projectId)}>Show Graph</button>
+                                        <div className="flex border-t-2 justify-evenly p-4">
+                                            <button className="text-xs bg-cyan-500 shadow-lg shadow-cyan-500/50 p-2 text-white hover:bg-cyan-600 duration-100" onClick={() => calculateWHData(data.projectId, data.project_latitude, data.project_longitude, data.year)}>Load Weather Data</button>
+                                            <button className="text-xs bg-blue-500 shadow-lg shadow-blue-500/50  p-2 text-white hover:bg-blue-600 duration-100" onClick={() => calculateGTI(data.projectId, data.project_latitude, data.project_longitude, data.designConfig.albido, data.designConfig.tiltDeg, data.designConfig.panelAzimuthDeg, data.designConfig.iamB0, data.designConfig.soilingLossFrac, data.designConfig.shadingLossFrac, data.designConfig.systemLossFrac, data.designConfig.otherOpticalLossFrac)}>Calculate GTI</button>
+                                            <button className="text-xs bg-indigo-500 shadow-lg shadow-indigo-500/50 p-2 text-white hover:bg-indigo-600 duration-100" onClick={() => startSimulation(data.projectId)}>Create Graph</button>
+                                            <button className="text-xs bg-orange-500 shadow-lg shadow-orange-500/50 p-2 text-white hover:bg-orange-600 duration-100" onClick={() => generateGraph(data.projectId)}>Show Graph</button>
                                         </div>
+
                                     </div>
                                 ))}
                             </div>
@@ -218,6 +243,7 @@ const MyDashboard = () => {
                     </div>
                 </div>
             </AlertModal>
+
         </>
     );
 

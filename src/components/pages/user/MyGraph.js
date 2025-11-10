@@ -12,7 +12,6 @@ const MyGraph = ({ id, onClose }) => {
     const [summaryData, setSummaryData] = useState(['']);
     const [projectData, setProjectData] = useState(['']);
     const [designConfigData, setDesignConfigData] = useState(['']);
-    //const [userData, setUserData] = useState(['']);
     const [pvModuleData, setPvModuleData] = useState(['']);
     const [inverterData, setInverterData] = useState(['']);
 
@@ -39,12 +38,10 @@ const MyGraph = ({ id, onClose }) => {
             try {
                 await Axios.get(RESULT.concat(id))
                     .then(function (response) {
-                        //console.log(response.data);
+                        console.log(response.data);
                         setSummaryData(response.data);
                         setProjectData(response.data[0].project);
                         setDesignConfigData(response.data[0].project.designConfig);
-                        //setUserData(response.data[0].project.user);
-                        //console.log(response.data[0].project.designConfig);
                         setPvModuleData(response.data[0].project.designConfig.pvModule);
                         setInverterData(response.data[0].project.designConfig.inverter);
 
@@ -85,7 +82,7 @@ const MyGraph = ({ id, onClose }) => {
                             avgSL += data.systemLoss;
                             return 0;
                         })
-                        //console.log(avgInverterOutputEng.toString().substring(0, 7));
+
                         setAvgArrayNomEnergy((avgArrEng / 12).toFixed(2));
                         setAvgArrayNomEngPerDay((avgArrPerDayEng / 12).toFixed(2));
                         setAvgArrayNomEngPerMonth((avgArrPerMonthEng / 12).toFixed(2));
@@ -103,7 +100,7 @@ const MyGraph = ({ id, onClose }) => {
                         setAvgPerRatio(avgPR / 12);
                         setAvgProUsefulEng(avgPUE / 12);
                         setAvgSystemLoss(avgSL / 12);
-                        // console.log(avgPUE);
+
                     })
             } catch (err) {
                 console.log(err);
@@ -112,32 +109,7 @@ const MyGraph = ({ id, onClose }) => {
         getResult();
     }, [id]);
 
-    //console.log(dataTest);
 
-    // const generatePDF = () => {
-    //     const input = document.getElementById("graphSummary");
-    //     const doc = new jsPDF("p", "mm", "a4");
-
-    //     html2canvas(input).then(canvas => {
-    //         var imgData = canvas.toDataURL('image/jpeg', 0.5);
-    //         doc.setFontSize(25);
-    //         var pageHeight = doc.internal.pageSize.getHeight();
-    //         var imgHeight = canvas.height * 200 / canvas.width;
-    //         var heightLeft = imgHeight;
-    //         var position = 0;
-    //         doc.addImage(imgData, 'JPEG', 10, position, 190, imgHeight);
-    //         heightLeft -= pageHeight;
-    //         while (heightLeft >= 0) {
-    //             position = heightLeft - imgHeight;
-    //             doc.addPage();
-    //             doc.addImage(imgData, 'JPEG', 10, position, 190, imgHeight);
-    //             heightLeft -= pageHeight;
-    //         }
-
-    //         doc.save('test.pdf');
-    //     });
-
-    // }
 
     const generatePDF = async () => {
         var projectReport = document.getElementById("projectReport");
@@ -173,8 +145,8 @@ const MyGraph = ({ id, onClose }) => {
                 <div className="col-span-5">
                     <p className='text-3xl text-center font-black text-gray-800'></p>
                 </div>
-                <button className="border-2 hover:bg-amber-500 hover:text-white hover:border-amber-500" onClick={onClose}>To Dashboard</button>
-                <button className="border-2 hover:bg-amber-500 hover:text-white hover:border-amber-500" onClick={() => generatePDF()}>Download</button>
+                <button className="bg-indigo-500 text-xs shadow-lg shadow-indigo-500/50 p-2 text-white hover:bg-indigo-600 duration-100" onClick={onClose}>To Dashboard</button>
+                <button className="bg-orange-500 text-xs shadow-lg shadow-orange-500/50 p-2 text-white hover:bg-orange-600" onClick={() => generatePDF()}>Download</button>
             </div>
             <div className="grid" id="projectReport">
                 <div className="md:grid-cols-2 md:gap-1 border-slate-300 border-[1px]">
@@ -527,70 +499,7 @@ const MyGraph = ({ id, onClose }) => {
                         </tbody>
                     </table>
                 </div>
-                {/* <div className="grid text-sm">
-                    <div className="text-sm p-4 bg-gray-50 font-bold">Calculated Values of the year</div>
-                    {summaryData.map((data, index) => (
-                        <table key={index} className="text-left text-sm w-[100%] mb-2 border border-gray-100">
-                            <tbody>
-                                <tr>
-                                    <th className="p-3">Month of {data.month}, {data.year}</th>
-                                </tr>
-                                <tr>
-                                    <td className="p-3">Array NOM Energy MWH:</td>
-                                    <td className="p-3">{data.arrNomEnrgy_MWh}</td>
-                                    <td className="p-3">Array NOM Energy KWH KWP per day:</td>
-                                    <td className="p-3">{data.arrNomEnrgy_kWh_kWp_perDay}</td>
-                                </tr>
-                                <tr>
-                                    <td className="p-3">Array NOM Energy KWH KWP per month:</td>
-                                    <td className="p-3">{data.arrNomEnrgy_kWh_kWp_perMonth}</td>
-                                    <td className="p-3">Available Energy at Inverter Output MWH:</td>
-                                    <td className="p-3">{data.availableEnergyAtInverterOutputMWh}</td>
-                                </tr>
-                                <tr>
-                                    <td className="p-3">Available Energy at Inverter Output per day:</td>
-                                    <td className="p-3">{data.availableEnergyAtInverterOutputPerDay}</td>
-                                    <td className="p-3">Available Energy at Inverter Output per month:</td>
-                                    <td className="p-3">{data.availableEnergyAtInverterOutputPerMonth}</td>
-                                </tr>
-                                <tr>
-                                    <td className="p-3">Collection Loss:</td>
-                                    <td className="p-3">{data.collectionLoss}</td>
-                                    <td className="p-3">EGrid MWH:</td>
-                                    <td className="p-3">{data.egridMWh}</td>
-                                </tr>
-                                <tr>
-                                    <td className="p-3">EGrid per day:</td>
-                                    <td className="p-3">{data.egridPerDay}</td>
-                                    <td className="p-3">EGrid per month:</td>
-                                    <td className="p-3">{data.egridPerMonth}</td>
-                                </tr>
-                                <tr>
-                                    <td className="p-3">Energy at MPPT MWH:</td>
-                                    <td className="p-3">{data.energyAtMPPTMWh}</td>
-                                    <td className="p-3">Energy at MPPT per day: </td>
-                                    <td className="p-3">{data.energyAtMPPTPerDay}</td>
-                                </tr>
-                                <tr>
-                                    <td className="p-3">Energy at MPPT per month:</td>
-                                    <td className="p-3">{data.energyAtMPPTPerMonth}</td>
-                                    <td className="p-3">Global Effective Irradiance:</td>
-                                    <td className="p-3">{data.globalEffIrradiance}</td>
-                                </tr>
-                                <tr>
-                                    <td className="p-3">Performance Ratio:</td>
-                                    <td className="p-3">{data.performanceRatio}</td>
-                                    <td className="p-3">Produced Useful Energy:</td>
-                                    <td className="p-3">{data.producedUsefulEnergy}</td>
-                                </tr>
-                                <tr>
-                                    <td className="p-3">System Loss:</td>
-                                    <td className="p-3"> {data.systemLoss}</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    ))}
-                </div> */}
+
             </div>
             <div className="grid md:grid-cols-12 text-sm border-[1px] border-slate-300 mt-4" id="resultGraph">
                 <div className="col-span-12 text-center text-lg font-black p-2">Comparision Table and Graphs</div>

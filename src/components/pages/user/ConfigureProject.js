@@ -1,14 +1,12 @@
 import React, { useState, useEffect } from "react";
 import Axios from "../../../api/Axios";
-// import { faFileExport } from "@fortawesome/free-solid-svg-icons";
-// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { USER_REGEX, NUMBER_DECIMAL, ONLY_INTEGER, DOUBLE_TYPE } from '../../Common/ValidationConstants';
 import Label from "../../Common/Label";
 import Input from "../../Common/Input";
 import AlertModal from "../../Common/Modal/AlertModal";
 import SelectSearch from "../../Common/SelectSearch";
 import UseAuth from "../../Hooks/UseAuth";
-//import Radio from "../../Common/RadioButton/Radio";
+import InfoModal from "../../Common/Modal/InfoModal";
 
 const GET_PVMODULES_URL = 'pvmodules/';
 const GET_INVERTER_URL = 'inverter/';
@@ -317,9 +315,9 @@ const ConfigureProject = () => {
                 systemLossFrac: systemLossFrac / 100
             }
             try {
-                console.log(data);
-                const response = await Axios.post(PV.concat(pvModuleId).concat(INV).concat(inverterId).concat(USER).concat(auth.userId).concat(CONFIG), data);
-                console.log(JSON.stringify(response?.data));
+                //const response = await Axios.post(PV.concat(pvModuleId).concat(INV).concat(inverterId).concat(USER).concat(auth.userId).concat(CONFIG), data);
+                await Axios.post(PV.concat(pvModuleId).concat(INV).concat(inverterId).concat(USER).concat(auth.userId).concat(CONFIG), data);
+                //console.log(JSON.stringify(response?.data));
                 setSuccessAlert(true);
             } catch (err) {
                 console.log(err);
@@ -328,14 +326,23 @@ const ConfigureProject = () => {
             setErrorAlert(true);
         }
     };
+
+    const [invInfo, setInvInfo] = useState(false);
+    const [pvInfo, setPvInfo] = useState(false);
+    const [module, setModule] = useState();
+
     const setSelectedPvModuleName = (selectedName) => {
         setPvModuleName(selectedName);
         setPvModuleId(selectedName.pvmodule_id);
+        setPvInfo(true);
+        setModule('pv');
     };
 
     const setSelectedInverterName = (inverterName) => {
         setInverterName(inverterName);
         setInverterId(inverterName.inverter_id);
+        setInvInfo(true);
+        setModule('inv');
     }
 
     return (
@@ -377,6 +384,7 @@ const ConfigureProject = () => {
                             errorMsg="Please select one inverter module from the list."
                         />
                     </div>
+
                     <div className="w-full md:w-1/3 pl-3">
                         <SelectSearch
                             id="pvModuleName"
@@ -698,6 +706,9 @@ const ConfigureProject = () => {
                     </div>
                 </div>
             </form>
+            <InfoModal modalOpen={invInfo} onClose={() => setInvInfo(false)} id={inverterId} tag={module} />
+
+            <InfoModal modalOpen={pvInfo} onClose={() => setPvInfo(false)} id={pvModuleId} tag={module} />
             <AlertModal modalOpen={errorAlert || successAlert} onClose={() => setErrorAlert(false) || setSuccessAlert(false)}>
                 <div className='text-center w-96'>
                     <h3 className={`text-lg font-black ${errorAlert ? "text-red-600" : "text-green-600"} p-4}`}>
